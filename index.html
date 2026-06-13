@@ -3,436 +3,355 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>موظّفك الذكي — وكيل ذكاء اصطناعي لمشروعك</title>
-<link href="https://fonts.googleapis.com/css2?family=Lalezar&family=IBM+Plex+Sans+Arabic:wght@400;500;700&display=swap" rel="stylesheet">
+<title>موظّفك الذكي — دكان المساعد الذكي</title>
+<link href="https://fonts.googleapis.com/css2?family=Rakkas&family=Tajawal:wght@400;500;700&family=IBM+Plex+Mono:wght@500&display=swap" rel="stylesheet">
 <style>
 :root{
-  --night:#171b33;
-  --night-2:#1f2444;
-  --karkadeh:#d9476b;
-  --karkadeh-deep:#a82c4e;
-  --sand:#f0e7d8;
-  --sand-dim:#bfb4a0;
-  --nile:#2fa394;
-  --nile-bubble:#1c4f49;
-  --display:'Lalezar',sans-serif;
-  --body:'IBM Plex Sans Arabic',sans-serif;
+  --wall:#f6e9d2;--wall-2:#efdcbd;--paper:#fcf6ea;
+  --awn-red:#c0484e;--awn-cream:#f7ecd8;
+  --wood:#8a4f2c;--wood-2:#693b1f;--wood-light:#b27c50;
+  --green:#2f8a64;--green-deep:#21694c;
+  --ink:#3a2c1e;--ink-soft:#917f64;--gold:#d99a4a;--rose:#d2738a;
+  --line:#e4d4b6;--blue:#3a6ea5;
+  --sign:'Rakkas',cursive;--body:'Tajawal',sans-serif;--mono:'IBM Plex Mono',monospace;
 }
 *{margin:0;padding:0;box-sizing:border-box}
 html{scroll-behavior:smooth}
-body{font-family:var(--body);background:var(--night);color:var(--sand);overflow-x:hidden}
+body{font-family:var(--body);color:var(--ink);line-height:1.75;background:var(--wall);
+  background-image:radial-gradient(circle at 50% 0,rgba(255,255,255,.5),transparent 60%),
+    linear-gradient(rgba(58,110,165,.05) 1px,transparent 1px),linear-gradient(90deg,rgba(58,110,165,.05) 1px,transparent 1px);
+  background-size:auto,28px 28px,28px 28px;overflow-x:hidden}
+.wrap{max-width:1040px;margin:0 auto;padding:0 22px}
+h1,h2,h3{font-family:var(--sign);font-weight:400;letter-spacing:.5px;line-height:1.15}
+.mono{font-family:var(--mono);font-feature-settings:"tnum"}
 
-/* ---- intro ---- */
-#intro{position:fixed;inset:0;z-index:100;background:var(--night);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:28px;transition:opacity .6s ease,visibility .6s}
-#intro.gone{opacity:0;visibility:hidden}
-.plug-stage{display:flex;align-items:center;direction:ltr}
-.plug-a,.plug-b{font-family:var(--display);font-size:clamp(40px,9vw,84px);line-height:1}
-.plug-a{color:var(--sand);transform:translateX(-60vw);animation:slideR 1.1s cubic-bezier(.2,.9,.25,1.15) forwards}
-.plug-b{color:var(--karkadeh);transform:translateX(60vw);animation:slideL 1.1s cubic-bezier(.2,.9,.25,1.15) forwards}
-@keyframes slideR{to{transform:translateX(0)}}
-@keyframes slideL{to{transform:translateX(0)}}
-.spark{width:10px;height:10px;border-radius:50%;background:var(--nile);opacity:0;margin:0 6px;animation:sparkPop .5s ease 1.05s forwards}
-@keyframes sparkPop{0%{opacity:0;transform:scale(0)}60%{opacity:1;transform:scale(2.4)}100%{opacity:1;transform:scale(1)}}
-.loading-bar{width:min(280px,60vw);height:4px;border-radius:4px;background:var(--night-2);overflow:hidden}
-.loading-bar i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--karkadeh),var(--nile));animation:load 1.9s ease .4s forwards}
-@keyframes load{to{width:100%}}
-#skip{position:absolute;bottom:28px;background:none;border:1px solid var(--sand-dim);color:var(--sand-dim);font-family:var(--body);font-size:13px;padding:7px 18px;border-radius:20px;cursor:pointer;transition:all .2s}
-#skip:hover,#skip:focus-visible{color:var(--sand);border-color:var(--sand)}
-.intro-tag{font-size:14px;color:var(--sand-dim);opacity:0;animation:fadeIn .6s ease 1.3s forwards}
-@keyframes fadeIn{to{opacity:1}}
+/* shutter */
+#shutter{position:fixed;inset:0;z-index:200;display:flex;align-items:center;justify-content:center;
+  background:repeating-linear-gradient(0deg,#b9bdc2 0 7px,#9aa0a6 7px 9px,#cfd3d7 9px 16px);
+  box-shadow:inset 0 -30px 40px rgba(0,0,0,.25);animation:rollup 1s ease 1.9s forwards}
+@keyframes rollup{to{transform:translateY(-101%)}}
+#shutter .open-tag{font-family:var(--sign);font-size:clamp(30px,8vw,60px);color:#fff;background:var(--green);
+  padding:6px 30px 12px;border-radius:14px;border:3px solid #fff;box-shadow:0 10px 26px rgba(0,0,0,.3);transform:rotate(-3deg)}
+#skip{position:fixed;z-index:201;bottom:20px;inset-inline-end:20px;background:#fff;border:1px solid var(--line);
+  color:var(--ink-soft);font-family:var(--body);font-size:12px;padding:6px 14px;border-radius:18px;cursor:pointer}
+#shutter.gone,#skip.gone{display:none}
 
-/* ---- shared ---- */
-.wrap{max-width:1120px;margin:0 auto;padding:0 24px}
-h1,h2,h3{font-family:var(--display);font-weight:400;letter-spacing:.5px}
-.eyebrow{display:inline-block;font-size:13px;color:var(--nile);border:1px solid rgba(47,163,148,.4);border-radius:20px;padding:5px 14px;margin-bottom:18px}
-section{padding:90px 0}
-.btn{display:inline-block;font-family:var(--display);font-size:20px;background:var(--karkadeh);color:#fff;text-decoration:none;padding:12px 36px 10px;border-radius:12px;border:none;cursor:pointer;box-shadow:0 6px 0 var(--karkadeh-deep);transition:transform .12s,box-shadow .12s}
-.btn:hover{transform:translateY(2px);box-shadow:0 4px 0 var(--karkadeh-deep)}
-.btn:active{transform:translateY(6px);box-shadow:0 0 0 var(--karkadeh-deep)}
-.btn:focus-visible{outline:3px solid var(--nile);outline-offset:3px}
-.sec-head{text-align:center}
-.sec-head h2{font-size:clamp(30px,4.5vw,46px);color:var(--sand)}
-.sec-head p{color:var(--sand-dim);font-size:16px;margin-top:6px;line-height:1.9}
+/* ticker */
+.ticker{background:var(--ink);color:var(--awn-cream);font-family:var(--mono);font-size:12.5px;
+  padding:7px 0;overflow:hidden;white-space:nowrap;position:relative;z-index:3}
+.ticker .run{display:inline-block;padding-inline-start:100%;animation:tick 22s linear infinite}
+.ticker b{color:var(--gold)}.ticker .g{color:#7fd0ad}
+@keyframes tick{to{transform:translateX(100%)}}
 
-/* ---- hero ---- */
-#hero{min-height:100vh;display:flex;align-items:center;background:radial-gradient(ellipse 60% 50% at 85% 20%,rgba(217,71,107,.14),transparent),radial-gradient(ellipse 50% 40% at 10% 85%,rgba(47,163,148,.12),transparent),var(--night);padding:110px 0 70px}
-.hero-grid{display:grid;grid-template-columns:1.05fr .95fr;gap:48px;align-items:center}
-.hero-copy h1{font-size:clamp(40px,5.6vw,68px);line-height:1.18;margin-bottom:8px}
-.hero-copy h1 .hl{color:var(--karkadeh)}
-.hero-sub{font-size:18px;line-height:1.9;color:var(--sand-dim);max-width:48ch;margin-bottom:30px}
-.hero-sub b{color:var(--sand);font-weight:700}
-.hero-note{margin-top:16px;font-size:13px;color:var(--sand-dim)}
-.no-meta{display:inline-flex;align-items:center;gap:7px;margin-bottom:18px;font-size:13px;color:var(--nile);background:rgba(47,163,148,.1);border:1px solid rgba(47,163,148,.35);border-radius:20px;padding:6px 14px}
+/* facade */
+.awning{position:relative;height:60px;background:repeating-linear-gradient(90deg,var(--awn-red) 0 46px,var(--awn-cream) 46px 92px);box-shadow:0 6px 0 rgba(0,0,0,.06)}
+.awning-scallop{display:block;width:100%;height:28px;margin-top:-1px}
+.eyebrow-sd{text-align:center;margin:18px 0 6px;font-size:13px;color:var(--green-deep);font-weight:700}
+.sign-hang{position:relative;width:max-content;max-width:92%;margin:8px auto 0;padding:16px 46px 22px;
+  background:linear-gradient(180deg,var(--wood-light),var(--wood));border:3px solid var(--wood-2);border-radius:14px;
+  box-shadow:0 14px 30px rgba(58,44,30,.28);text-align:center}
+.sign-hang::before,.sign-hang::after{content:"";position:absolute;top:-26px;width:3px;height:26px;background:var(--wood-2)}
+.sign-hang::before{inset-inline-start:42px;transform:rotate(8deg)}.sign-hang::after{inset-inline-end:42px;transform:rotate(-8deg)}
+.sign-hang h1{font-size:clamp(42px,8.5vw,80px);color:#fff;text-shadow:0 2px 0 var(--wood-2),0 4px 8px rgba(0,0,0,.3)}
+.sign-hang .nail{position:absolute;top:9px;width:9px;height:9px;border-radius:50%;background:var(--gold)}
+.sign-hang .nail.l{inset-inline-start:14px}.sign-hang .nail.r{inset-inline-end:14px}
+.tagline{text-align:center;font-size:17px;color:var(--ink);max-width:36ch;margin:18px auto 4px;font-weight:500}
+.tagline b{color:var(--awn-red)}
+.no-meta{text-align:center;margin:10px 0 0;font-size:12.5px;color:var(--green-deep);font-weight:700}
 
-/* ---- demo stage ---- */
-.demo-stage{position:relative;display:flex;justify-content:center}
-.phone{width:300px;border-radius:34px;background:var(--night-2);border:6px solid #2a2f45;box-shadow:0 30px 70px rgba(0,0,0,.5);overflow:hidden;position:relative;z-index:2}
-.chat-head{background:linear-gradient(135deg,var(--karkadeh-deep),var(--nile-bubble));display:flex;align-items:center;gap:10px;padding:12px 14px;font-size:14px;color:#fff}
-.chat-avatar{width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-family:var(--display);font-size:17px;color:#fff}
-.chat-status{font-size:11px;color:#cdeee8}
-.chat-body{height:360px;padding:14px 10px;display:flex;flex-direction:column;gap:8px;background:var(--night);overflow:hidden}
-.msg{max-width:82%;padding:8px 12px;border-radius:12px;font-size:13.5px;line-height:1.7;opacity:0;transform:translateY(14px);transition:opacity .4s,transform .4s}
-.msg.show{opacity:1;transform:none}
-.msg.cust{background:var(--night-2);color:var(--sand);align-self:flex-start;border-top-right-radius:3px}
-.msg.bot{background:var(--nile-bubble);color:#eafaf7;align-self:flex-end;border-top-left-radius:3px}
-.msg.sys{align-self:center;background:rgba(217,71,107,.13);color:var(--karkadeh);font-size:11.5px;border:1px dashed rgba(217,71,107,.5);border-radius:8px}
-.chat-foot{display:flex;align-items:center;gap:8px;padding:9px 12px;background:var(--night-2);font-size:12px;color:var(--sand-dim);border-top:1px solid rgba(240,231,216,.07)}
-.chat-foot span{flex:1}
-.chat-foot b{color:var(--nile);font-family:var(--display);font-weight:400}
-.typing{display:inline-flex;gap:4px;padding:4px 2px}
-.typing i{width:6px;height:6px;border-radius:50%;background:var(--sand-dim);animation:blink 1s infinite}
-.typing i:nth-child(2){animation-delay:.2s}.typing i:nth-child(3){animation-delay:.4s}
-@keyframes blink{0%,100%{opacity:.25}50%{opacity:1}}
+/* ===== INTELLIGENT TERMINAL (blueprint + live transaction) ===== */
+.terminal{position:relative;max-width:820px;margin:40px auto 0;padding:30px 26px 34px}
+/* blueprint frame */
+.bp{position:absolute;inset:0;pointer-events:none}
+.bp .dim{position:absolute;font-family:var(--mono);font-size:10px;color:var(--blue);opacity:.8}
+.bp line{stroke:var(--blue);stroke-width:1;opacity:.5}
+.bp .tick{stroke-dasharray:2 3}
+.terminal-inner{position:relative;display:grid;grid-template-columns:118px 1fr;gap:22px;align-items:end;
+  background:linear-gradient(180deg,#fdf9f0,#f4e7ce);border:2px solid var(--line);border-radius:20px;padding:24px 22px;
+  box-shadow:0 18px 40px rgba(58,44,30,.14)}
+.keeper svg{display:block;filter:drop-shadow(0 8px 12px rgba(58,44,30,.18))}
+.keeper .kcap{text-align:center;font-family:var(--mono);font-size:10px;color:var(--blue);margin-top:4px}
+.panel{min-height:330px;display:flex;flex-direction:column;justify-content:flex-end;gap:9px}
+.b{max-width:88%;padding:9px 13px;border-radius:14px;font-size:13.5px;line-height:1.6;opacity:0;transform:translateY(10px);transition:.4s}
+.b.show{opacity:1;transform:none}
+.b.cust{align-self:flex-start;background:#fff;border:1px solid var(--line);border-bottom-right-radius:3px}
+.b.bot{align-self:flex-end;background:var(--green);color:#fff;border-bottom-left-radius:3px}
+.b.typing{display:inline-flex;gap:4px}
+.b.typing i{width:6px;height:6px;border-radius:50%;background:#fff;opacity:.7;animation:blink 1s infinite}
+.b.typing i:nth-child(2){animation-delay:.2s}.b.typing i:nth-child(3){animation-delay:.4s}
+@keyframes blink{0%,100%{opacity:.3}50%{opacity:1}}
+/* scale (ميزان) */
+.scale{align-self:flex-start;width:88%;background:#fff;border:1px solid var(--line);border-radius:14px;padding:10px 14px;
+  display:flex;align-items:center;gap:12px;opacity:0;transform:translateY(10px);transition:.4s}
+.scale.show{opacity:1;transform:none}
+.scale svg{flex:0 0 auto}
+.scale .rd{font-family:var(--mono);font-size:15px;color:var(--ink)}
+.scale .rd small{color:var(--ink-soft);font-size:11px;display:block;font-family:var(--body)}
+/* calc strip (مقاسات/أوزان/فلوس) */
+.calc{align-self:flex-start;width:88%;background:var(--ink);color:var(--awn-cream);border-radius:14px;padding:12px 16px;
+  font-family:var(--mono);font-size:13px;opacity:0;transform:translateY(10px);transition:.4s}
+.calc.show{opacity:1;transform:none}
+.calc .ln{display:flex;justify-content:space-between;padding:2px 0;border-bottom:1px dashed rgba(255,255,255,.15)}
+.calc .ln:last-child{border:none;color:var(--gold);font-size:17px;padding-top:6px}
+/* bankak card (تعاملات بنكية) */
+.bankak{align-self:flex-end;width:88%;background:#0e2a47;color:#fff;border-radius:16px;padding:14px 16px;
+  box-shadow:0 12px 26px rgba(14,42,71,.4);opacity:0;transform:translateY(14px) scale(.96);transition:.5s}
+.bankak.show{opacity:1;transform:none}
+.bankak .top{display:flex;align-items:center;gap:9px;margin-bottom:8px}
+.bankak .logo{width:30px;height:30px;border-radius:8px;background:linear-gradient(135deg,#1ea36b,#0e7a4d);display:flex;align-items:center;justify-content:center;font-family:var(--sign);font-size:14px}
+.bankak .top b{font-size:14px}.bankak .top span{margin-inline-start:auto;font-family:var(--mono);font-size:10px;color:#9fc2e0}
+.bankak .amt{font-family:var(--mono);font-size:22px;color:#5fe0a0}
+.bankak .st{font-size:12px;color:#cfe3f3;display:flex;align-items:center;gap:6px;margin-top:2px}
 
-/* QR card */
-.qr-card{position:absolute;z-index:4;bottom:-22px;inset-inline-start:-40px;background:var(--sand);color:var(--night);border-radius:16px;padding:14px;width:150px;text-align:center;box-shadow:0 18px 40px rgba(0,0,0,.45);animation:float 5s ease-in-out infinite}
-.qr-card .qr{width:108px;height:108px;margin:0 auto 8px;display:flex;align-items:center;justify-content:center;background:#fff;padding:5px;border-radius:6px}
-.qr-card .qr img,.qr-card .qr canvas{width:98px!important;height:98px!important}
-.qr-card small{font-family:var(--display);font-size:14px;color:var(--karkadeh-deep);display:block;line-height:1.4}
-.qr-card .tiny{font-size:10px;color:#6b6457;margin-top:2px}
+.cta-shop{text-align:center;margin:32px 0 0}
+.btn{display:inline-flex;align-items:center;gap:10px;font-family:var(--sign);font-size:26px;background:var(--awn-red);color:#fff;
+  text-decoration:none;padding:10px 36px 14px;border-radius:14px;border:none;cursor:pointer;box-shadow:0 8px 0 #8f3338;transition:transform .12s,box-shadow .12s}
+.btn:hover{transform:translateY(2px);box-shadow:0 6px 0 #8f3338}
+.btn:active{transform:translateY(8px);box-shadow:0 0 0 #8f3338}
+.btn:focus-visible{outline:3px solid var(--green);outline-offset:3px}
+.qr-tag{display:flex;align-items:center;gap:12px;justify-content:center;margin:16px 0 0;font-size:13px;color:var(--ink-soft)}
+.qr-tag .qr{width:72px;height:72px;background:#fff;border:1px solid var(--line);border-radius:8px;padding:4px;display:flex;align-items:center;justify-content:center}
+.qr-tag .qr img,.qr-tag .qr canvas{width:64px!important;height:64px!important}
 
-/* chips */
-.chip{position:absolute;z-index:3;display:flex;align-items:center;gap:8px;background:var(--night-2);border:1px solid rgba(240,231,216,.18);border-radius:12px;padding:8px 14px;font-size:13px;color:var(--sand);box-shadow:0 8px 24px rgba(0,0,0,.4);animation:float 4.5s ease-in-out infinite}
-.chip .dot{width:8px;height:8px;border-radius:50%;background:var(--nile);animation:pulse 2s infinite}
-@keyframes pulse{0%,100%{box-shadow:0 0 0 0 rgba(47,163,148,.5)}50%{box-shadow:0 0 0 7px rgba(47,163,148,0)}}
-@keyframes float{0%,100%{transform:translateY(0)}50%{transform:translateY(-9px)}}
-.chip.c1{top:4%;inset-inline-start:-12%}
-.chip.c2{top:40%;inset-inline-start:-20%;animation-delay:1.2s}
-.chip.c3{top:70%;inset-inline-end:-14%;animation-delay:2.2s}
-.wires{position:absolute;inset:0;z-index:1;pointer-events:none}
-.wires path{stroke:var(--nile);stroke-width:2;fill:none;opacity:.45;stroke-dasharray:8 7;animation:dash 1.4s linear infinite}
-@keyframes dash{to{stroke-dashoffset:-15}}
+/* section sign with measure ticks */
+.shop-sec{padding:70px 0}
+.sec-sign{text-align:center;margin-bottom:36px}
+.sec-sign h2{display:inline-block;font-size:clamp(30px,5vw,46px);color:var(--ink)}
+.sec-sign h2 .u{display:block;height:5px;width:62%;margin:6px auto 0;background:var(--awn-red);border-radius:3px}
+.sec-sign .measure{display:block;font-family:var(--mono);font-size:10px;color:var(--blue);opacity:.7;margin-top:6px;letter-spacing:2px}
+.sec-sign p{color:var(--ink-soft);font-size:15px;margin-top:6px}
 
-/* ---- steps ---- */
-#steps{background:var(--night-2)}
-.steps-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:24px;margin-top:44px}
-.step{background:var(--night);border:1px solid rgba(240,231,216,.1);border-radius:18px;padding:28px 24px;transition:transform .2s,border-color .2s}
-.step:hover{transform:translateY(-6px);border-color:var(--karkadeh)}
-.step .ic{font-size:34px;margin-bottom:14px;display:block}
-.step h3{font-size:24px;margin-bottom:8px;color:var(--sand)}
-.step p{font-size:14.5px;line-height:1.9;color:var(--sand-dim)}
-.step p b{color:var(--nile);font-weight:700}
+#shelf .goods{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;align-items:end}
+.good{text-align:center;transition:transform .2s}.good:hover{transform:translateY(-6px)}
+.good .jar{height:112px;display:flex;align-items:flex-end;justify-content:center}
+.good .label{background:var(--paper);border:1px solid var(--line);border-radius:10px;padding:10px 8px;margin-top:8px;box-shadow:0 6px 12px rgba(58,44,30,.08)}
+.good h3{font-size:18px;color:var(--ink);margin-bottom:3px}.good p{font-size:11.5px;color:var(--ink-soft);line-height:1.55}
+.good .tg{display:inline-block;margin-top:7px;font-size:10.5px;font-weight:700;color:var(--green-deep);background:#e3f1ea;border-radius:12px;padding:2px 9px}
+.good .tg.hot{color:var(--awn-red);background:#fbe6e7}
+.shelf-wood{height:16px;background:linear-gradient(180deg,var(--wood-light),var(--wood));border-radius:4px;box-shadow:0 10px 18px rgba(58,44,30,.18);margin-top:8px}
 
-/* ---- templates ---- */
-.tpl-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:18px;margin-top:44px}
-.tpl{background:linear-gradient(160deg,var(--night-2),var(--night));border:1px solid rgba(240,231,216,.1);border-radius:18px;padding:24px 20px;text-align:center;cursor:pointer;transition:transform .2s,border-color .2s,box-shadow .2s}
-.tpl:hover{transform:translateY(-6px) rotate(-1deg);border-color:var(--nile);box-shadow:0 16px 36px rgba(0,0,0,.35)}
-.tpl .ic{font-size:38px;display:block;margin-bottom:12px}
-.tpl h3{font-size:20px;color:var(--sand);margin-bottom:6px}
-.tpl p{font-size:13px;color:var(--sand-dim);line-height:1.8}
-.tpl .tag{display:inline-block;margin-top:12px;font-size:11px;color:var(--karkadeh);border:1px solid rgba(217,71,107,.4);border-radius:14px;padding:3px 10px}
+.notes{display:grid;grid-template-columns:repeat(3,1fr);gap:26px}
+.note{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:30px 24px 24px;box-shadow:0 10px 22px rgba(58,44,30,.1)}
+.note:nth-child(1){transform:rotate(-1.5deg)}.note:nth-child(2){transform:rotate(1deg)}.note:nth-child(3){transform:rotate(-.8deg)}
+.note::before{content:"";position:absolute;top:-10px;inset-inline-start:50%;transform:translateX(50%) rotate(3deg);width:74px;height:22px;background:rgba(210,115,138,.35);border:1px solid rgba(210,115,138,.4)}
+.note .n{font-family:var(--sign);font-size:30px;color:var(--awn-red)}
+.note h3{font-size:22px;color:var(--ink);margin:6px 0 8px}.note p{font-size:14px;color:var(--ink-soft)}.note p b{color:var(--green-deep);font-weight:700}
 
-/* ---- channels strip ---- */
-#channels{background:var(--night)}
-.ch-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:40px}
-.ch{display:flex;gap:14px;align-items:flex-start;background:var(--night-2);border:1px solid rgba(240,231,216,.1);border-radius:16px;padding:22px}
-.ch .ic{font-size:30px}
-.ch h3{font-size:20px;color:var(--sand);margin-bottom:4px}
-.ch p{font-size:13.5px;color:var(--sand-dim);line-height:1.8}
+.placards{display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.placard{position:relative;background:#fff;border:2px solid var(--wood);border-radius:12px;padding:24px 20px;text-align:center;box-shadow:0 8px 18px rgba(58,44,30,.1)}
+.placard::before{content:"";position:absolute;top:-12px;inset-inline-start:50%;transform:translateX(50%);width:10px;height:10px;border-radius:50%;background:var(--wood-2)}
+.placard .ic{font-size:30px}.placard h3{font-size:18px;color:var(--ink);margin:6px 0 4px}.placard p{font-size:13px;color:var(--ink-soft);line-height:1.6}
 
-/* ---- pricing ---- */
-#pricing{background:var(--night-2)}
-.price-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;margin-top:44px}
-.plan{background:var(--night);border:1px solid rgba(240,231,216,.1);border-radius:18px;padding:30px 26px;position:relative}
-.plan.hot{border-color:var(--karkadeh);transform:scale(1.04)}
-.plan .badge{position:absolute;top:-13px;inset-inline-start:50%;transform:translateX(50%);background:var(--karkadeh);color:#fff;font-size:12px;border-radius:14px;padding:4px 14px}
-.plan h3{font-size:24px;color:var(--sand)}
-.plan .pr{font-family:var(--display);font-size:38px;color:var(--nile);margin:8px 0 2px}
-.plan .pr small{font-size:15px;color:var(--sand-dim);font-family:var(--body)}
-.plan ul{list-style:none;margin:18px 0 0;font-size:14px;color:var(--sand-dim)}
-.plan li{padding:7px 0;border-bottom:1px dashed rgba(240,231,216,.1);line-height:1.7}
-.plan li::before{content:"✓ ";color:var(--nile);font-weight:700}
-.pay-note{margin-top:30px;text-align:center;font-size:14px;color:var(--sand-dim);background:rgba(217,71,107,.08);border:1px dashed rgba(217,71,107,.4);border-radius:14px;padding:14px 20px;line-height:1.9}
-.pay-note b{color:var(--karkadeh)}
+.board{max-width:760px;margin:0 auto;background:var(--paper);border:10px solid var(--wood);border-radius:14px;padding:32px 30px;box-shadow:0 16px 36px rgba(58,44,30,.18),inset 0 0 0 2px var(--line)}
+.board .bh{text-align:center;font-family:var(--sign);font-size:34px;color:var(--awn-red);margin-bottom:4px}
+.board .bsub{text-align:center;font-size:13px;color:var(--ink-soft);margin-bottom:20px}
+.row{display:flex;justify-content:space-between;align-items:flex-start;gap:14px;padding:15px 6px;border-bottom:2px dotted var(--line)}
+.row:last-child{border-bottom:none}
+.row .name{font-family:var(--sign);font-size:25px;color:var(--ink)}
+.row .feat{font-size:12.5px;color:var(--ink-soft);margin-top:2px}
+.row .price{font-family:var(--mono);font-size:24px;color:var(--green-deep);white-space:nowrap}
+.row .price small{font-size:11px;color:var(--ink-soft)}
+.row.pick{position:relative;background:rgba(210,115,138,.08);border-radius:10px}
+.row.pick .name{color:var(--awn-red)}
+.row .star{position:absolute;top:-10px;inset-inline-start:14px;background:var(--rose);color:#fff;font-size:11px;font-weight:700;border-radius:10px;padding:2px 10px}
+.pay-note{max-width:760px;margin:22px auto 0;text-align:center;font-size:14px;color:var(--ink-soft);background:#fff;border:1px dashed var(--rose);border-radius:14px;padding:14px 20px}
+.pay-note b{color:var(--awn-red)}
 
-/* ---- cta / footer ---- */
-#cta{text-align:center}
-#cta h2{font-size:clamp(32px,5vw,52px);margin-bottom:12px}
-#cta p{color:var(--sand-dim);font-size:17px;line-height:1.9;margin-bottom:30px}
-.cta-wrap{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center;text-align:right}
-.cta-copy h2{text-align:right}
-.form-card{background:var(--night-2);border:1px solid rgba(240,231,216,.12);border-radius:20px;padding:28px}
-#signup{display:flex;flex-direction:column;gap:16px}
-#signup label{display:flex;flex-direction:column;gap:7px;font-size:14px;color:var(--sand);text-align:right}
-#signup input,#signup select{background:var(--night);border:1px solid rgba(240,231,216,.18);border-radius:10px;padding:11px 13px;color:var(--sand);font-family:var(--body);font-size:14px}
-#signup input:focus,#signup select:focus{outline:2px solid var(--nile);outline-offset:1px;border-color:var(--nile)}
-#signup input::placeholder{color:var(--sand-dim)}
-#signup .btn{width:100%;margin-top:6px;text-align:center}
-.form-done{text-align:center;padding:30px 10px}
-.form-done .check{width:64px;height:64px;margin:0 auto 14px;border-radius:50%;background:var(--nile);color:#fff;font-size:34px;display:flex;align-items:center;justify-content:center}
-.form-done h3{font-size:26px;color:var(--sand);margin-bottom:6px}
-.form-done p{color:var(--sand-dim);font-size:15px;margin:0}
-footer{border-top:1px solid rgba(240,231,216,.08);padding:26px 0;text-align:center;font-size:13px;color:var(--sand-dim)}
-footer b{color:var(--karkadeh)}
+#order .order-grid{display:grid;grid-template-columns:1fr 1fr;gap:40px;align-items:center}
+.order-copy .bell{font-size:40px}.order-copy h2{font-size:clamp(28px,4.6vw,42px);color:var(--ink);margin:6px 0 10px}
+.order-copy p{color:var(--ink-soft);font-size:16px}
+.pad{position:relative;background:var(--paper);border:1px solid var(--line);border-radius:6px;padding:34px 26px 26px;box-shadow:0 14px 34px rgba(58,44,30,.14);background-image:repeating-linear-gradient(0deg,transparent 0 30px,rgba(138,79,44,.07) 30px 31px)}
+.pad .spiral{position:absolute;top:-9px;inset-inline:24px;display:flex;justify-content:space-between}
+.pad .spiral i{width:11px;height:18px;border-radius:6px;background:var(--wood)}
+.pad .ph{font-family:var(--sign);font-size:26px;color:var(--awn-red);text-align:center;margin-bottom:12px}
+#signup{display:flex;flex-direction:column;gap:13px}
+#signup label{display:flex;flex-direction:column;gap:6px;font-size:13.5px;font-weight:700;color:var(--ink)}
+#signup input,#signup select{background:#fffdf8;border:none;border-bottom:2px solid var(--wood-light);padding:9px 4px;color:var(--ink);font-family:var(--body);font-size:14px}
+#signup input:focus,#signup select:focus{outline:none;border-bottom-color:var(--awn-red)}
+#signup input::placeholder{color:#bcab8f}
+#signup .btn{justify-content:center;width:100%;margin-top:8px;font-size:22px}
+.form-done{text-align:center;padding:26px 8px}
+.form-done .stamp{display:inline-block;font-family:var(--sign);font-size:28px;color:var(--green);border:3px solid var(--green);border-radius:12px;padding:4px 20px 8px;transform:rotate(-7deg);margin-bottom:12px}
+.form-done h3{font-size:24px;color:var(--ink);margin-bottom:4px}.form-done p{color:var(--ink-soft);font-size:15px}
+footer{margin-top:18px;border-top:3px solid var(--wood);background:var(--wall-2);padding:24px 0;text-align:center;font-size:13px;color:var(--ink-soft)}
+footer b{color:var(--awn-red)}footer .hours{font-family:var(--sign);font-size:20px;color:var(--green-deep);display:block;margin-bottom:4px}
 
-/* ---- responsive ---- */
-@media(max-width:920px){
-  .hero-grid{grid-template-columns:1fr;text-align:center}
-  .hero-copy{order:1}.demo-stage{order:2;margin-top:30px}
-  .hero-sub{margin-inline:auto}
-  .steps-grid,.price-grid,.ch-grid{grid-template-columns:1fr;max-width:440px;margin-inline:auto}
-  .cta-wrap{grid-template-columns:1fr;max-width:440px;margin-inline:auto;text-align:center}
-  .cta-copy h2{text-align:center}
-  .tpl-grid{grid-template-columns:repeat(2,1fr)}
-  .chip.c1{inset-inline-start:0}.chip.c2{inset-inline-start:-4%}.chip.c3{inset-inline-end:0}
-  .qr-card{inset-inline-start:-10px;bottom:-30px}
-  .plan.hot{transform:none}
+@media(max-width:820px){
+  .terminal-inner{grid-template-columns:1fr}.keeper{display:flex;justify-content:center}
+  #shelf .goods{grid-template-columns:repeat(2,1fr);gap:24px}
+  .notes,.placards{grid-template-columns:1fr;max-width:420px;margin-inline:auto}
+  #order .order-grid{grid-template-columns:1fr;max-width:440px;margin-inline:auto;text-align:center}
+  .order-copy h2{text-align:center}
+  .bp{display:none}
 }
-@media(max-width:520px){
-  .tpl-grid{grid-template-columns:1fr;max-width:340px;margin-inline:auto}
-  .chip{font-size:11px;padding:6px 10px}
-  .qr-card{width:120px}.qr-card .qr{width:88px;height:88px}
-}
-@media(prefers-reduced-motion:reduce){*,*::before,*::after{animation-duration:.01ms!important;animation-iteration-count:1!important;transition-duration:.01ms!important}#intro{display:none}}
+@media(max-width:480px){#shelf .goods{grid-template-columns:1fr;max-width:260px;margin-inline:auto}.row{flex-direction:column;gap:4px}}
+@media(prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}#shutter,#skip{display:none}.b,.scale,.calc,.bankak{opacity:1!important;transform:none!important}}
 </style>
 </head>
 <body>
 
-<div id="intro" role="presentation">
-  <div class="plug-stage">
-    <span class="plug-b">موظّفك</span>
-    <span class="spark"></span>
-    <span class="plug-a">الذكي</span>
-  </div>
-  <div class="intro-tag">وكيل ذكاء اصطناعي… يشتغل بدالك</div>
-  <div class="loading-bar"><i></i></div>
-  <button id="skip">تخطّي المقدمة ◂</button>
-</div>
+<div id="shutter"><div class="open-tag">مفتوح ●</div></div>
+<button id="skip">افتح المحل ◂</button>
 
-<section id="hero">
-  <div class="wrap hero-grid">
-    <div class="hero-copy">
-      <span class="eyebrow">🇸🇩 صُنع لأصحاب المشاريع في السودان</span>
-      <h1>وظّف <span class="hl">موظفاً ذكياً</span><br>يرد على زبائنك في أي وقت</h1>
-      <span class="no-meta">🔓 بدون تطبيق · بدون تحقق ميتا · بدون انتظار</span>
-      <p class="hero-sub">
-        احصل على <b>رابط ورمز QR</b> خاص بمحلك، انشره في أي مكان — البايو، الاستوري،
-        أو علّقه على الواجهة. زبونك يضغط ويكلّم مساعدك الذكي مباشرة من المتصفح:
-        يرد بالعربي، يعرف أسعارك من <b>جوجل شيتس</b>، ويسجّل الطلبات.
-      </p>
-      <a class="btn" href="#cta">جرّبه مجاناً</a>
-      <p class="hero-note">بدون بطاقة ائتمان · أول 100 رسالة مجاناً</p>
-    </div>
+<div class="ticker"><span class="run">📊 اليوم في دكاكين «موظّفك الذكي»: <b>١٢٤</b> طلب · <span class="g">٢٫٣ مليون ج</span> تم تحصيلها · <b>٣١</b> محل جديد · متوسط الرد <span class="g">٤ ثوانٍ</span> · &nbsp;&nbsp;&nbsp; 📊 اليوم: <b>١٢٤</b> طلب · <span class="g">٢٫٣ مليون ج</span> · </span></div>
 
-    <div class="demo-stage">
-      <svg class="wires" viewBox="0 0 400 540" aria-hidden="true">
-        <path d="M70,55 C150,75 190,115 230,155"/>
-        <path d="M40,245 C130,245 170,255 225,265"/>
-        <path d="M360,400 C300,400 270,370 235,335"/>
+<header class="facade">
+  <div class="awning"></div>
+  <svg class="awning-scallop" viewBox="0 0 1200 28" preserveAspectRatio="none" aria-hidden="true">
+    <path d="M0,0 Q30,28 60,0 Q90,28 120,0 Q150,28 180,0 Q210,28 240,0 Q270,28 300,0 Q330,28 360,0 Q390,28 420,0 Q450,28 480,0 Q510,28 540,0 Q570,28 600,0 Q630,28 660,0 Q690,28 720,0 Q750,28 780,0 Q810,28 840,0 Q870,28 900,0 Q930,28 960,0 Q990,28 1020,0 Q1050,28 1080,0 Q1110,28 1140,0 Q1170,28 1200,0 L1200,0Z" fill="#c0484e"/>
+  </svg>
+
+  <div class="wrap">
+    <div class="eyebrow-sd">🇸🇩 دكان رقمي لأصحاب المشاريع في السودان</div>
+    <div class="sign-hang"><span class="nail l"></span><span class="nail r"></span><h1>موظّفك الذكي</h1></div>
+    <p class="tagline">موظف ذكي <b>يستقبل · يحسب · يوزن · يحصّل</b> — يرد على الزبون، يجهّز الطلب، ويستلم الفلوس على بنكك.</p>
+    <div class="no-meta">🔓 بدون تطبيق · بدون تحقق ميتا · بدون انتظار</div>
+
+    <div class="terminal">
+      <svg class="bp" width="100%" height="100%" preserveAspectRatio="none" aria-hidden="true">
+        <line class="tick" x1="6" y1="14" x2="6" y2="96%"/>
+        <line class="tick" x1="6" y1="14" x2="40" y2="14"/>
+        <line class="tick" x1="6" y1="96%" x2="40" y2="96%"/>
+        <line class="tick" x1="99%" y1="40" x2="99%" y2="86%"/>
       </svg>
-      <div class="chip c1"><span class="dot"></span>جوجل شيتس · البضاعة</div>
-      <div class="chip c2"><span class="dot"></span>رابط + QR خاص</div>
-      <div class="chip c3"><span class="dot"></span>سجل الطلبات</div>
-
-      <div class="phone" aria-label="عرض توضيحي لمحادثة">
-        <div class="chat-head">
-          <div class="chat-avatar">م</div>
-          <div>
-            <div>متجر النيل · مساعد ذكي</div>
-            <div class="chat-status">● متصل عبر الرابط</div>
-          </div>
+      <span class="bp dim" style="top:46%;inset-inline-start:-2px;writing-mode:vertical-rl">مقاس قياسي</span>
+      <span class="bp dim" style="top:8px;inset-inline-end:6px">مسافات ٨pt</span>
+      <div class="terminal-inner">
+        <div class="keeper">
+          <svg viewBox="0 0 130 150" width="118" height="138" aria-label="المساعد الذكي">
+            <line x1="65" y1="14" x2="65" y2="28" stroke="#8a4f2c" stroke-width="3"/><circle cx="65" cy="11" r="6" fill="#d99a4a"/>
+            <rect x="34" y="26" width="62" height="50" rx="16" fill="#2f8a64"/><rect x="42" y="40" width="46" height="22" rx="11" fill="#fcf6ea"/>
+            <circle cx="56" cy="51" r="4.5" fill="#3a2c1e"/><circle cx="74" cy="51" r="4.5" fill="#3a2c1e"/>
+            <path d="M58 64 Q65 70 72 64" stroke="#2f8a64" stroke-width="2.5" fill="none" stroke-linecap="round"/>
+            <rect x="30" y="76" width="70" height="58" rx="14" fill="#c0484e"/><path d="M48 76 h34 v40 a17 17 0 0 1 -34 0 Z" fill="#f7ecd8"/>
+            <circle cx="65" cy="98" r="5" fill="#d99a4a"/><rect x="14" y="86" width="18" height="40" rx="9" fill="#2f8a64"/><rect x="98" y="86" width="18" height="40" rx="9" fill="#2f8a64"/>
+          </svg>
+          <div class="kcap">الوحدة ٠١ — الكاشير</div>
         </div>
-        <div class="chat-body" id="chat"></div>
-        <div class="chat-foot"><span>اكتب رسالتك…</span><b>↩ إرسال</b></div>
-      </div>
-
-      <div class="qr-card">
-        <div class="qr" id="qr" aria-hidden="true"></div>
-        <small>امسح وجرّب</small>
-        <div class="tiny">nile.mowazzaf.ai</div>
+        <div class="panel" id="panel"></div>
       </div>
     </div>
-  </div>
-</section>
 
-<section id="steps">
+    <div class="cta-shop">
+      <a class="btn" href="#order">🔔 اطلب موظفك</a>
+      <div class="qr-tag"><div class="qr" id="qr" aria-hidden="true"></div><span>امسح الكود وجرّب الموظف على طول</span></div>
+    </div>
+  </div>
+</header>
+
+<section class="shop-sec" id="shelf">
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">كيف يعمل؟</span>
-      <h2>ثلاث خطوات… وموظفك جاهز</h2>
+    <div class="sec-sign"><h2>على الرف<span class="u"></span></h2><span class="measure">├──── ٤ وحدات ────┤</span><p>موظف جاهز لكل نوع شغل</p></div>
+    <div class="goods">
+      <div class="good"><div class="jar"><svg width="74" height="112" viewBox="0 0 74 112"><rect x="20" y="6" width="34" height="10" rx="3" fill="#b27c50"/><rect x="12" y="16" width="50" height="90" rx="14" fill="#e8c98f" stroke="#8a4f2c" stroke-width="2"/><text x="37" y="68" font-size="26" text-anchor="middle">🛍️</text></svg></div><div class="label"><h3>مساعد المبيعات</h3><p>يعرض، يسعّر، يقفل الطلب</p><span class="tg hot">الأكثر طلباً</span></div></div>
+      <div class="good"><div class="jar"><svg width="74" height="112" viewBox="0 0 74 112"><rect x="20" y="6" width="34" height="10" rx="3" fill="#b27c50"/><rect x="12" y="16" width="50" height="90" rx="14" fill="#cfe3d8" stroke="#2f8a64" stroke-width="2"/><text x="37" y="68" font-size="26" text-anchor="middle">💬</text></svg></div><div class="label"><h3>خدمة الزبائن</h3><p>يجاوب من ملف محلّك</p><span class="tg">متاح</span></div></div>
+      <div class="good"><div class="jar"><svg width="74" height="112" viewBox="0 0 74 112"><rect x="20" y="6" width="34" height="10" rx="3" fill="#b27c50"/><rect x="12" y="16" width="50" height="90" rx="14" fill="#f0d3b0" stroke="#8a4f2c" stroke-width="2"/><text x="37" y="68" font-size="26" text-anchor="middle">📅</text></svg></div><div class="label"><h3>حجز المواعيد</h3><p>للعيادات والصالونات</p><span class="tg">متاح</span></div></div>
+      <div class="good"><div class="jar"><svg width="74" height="112" viewBox="0 0 74 112"><rect x="20" y="6" width="34" height="10" rx="3" fill="#b27c50"/><rect x="12" y="16" width="50" height="90" rx="14" fill="#e7d6ec" stroke="#9a5e86" stroke-width="2"/><text x="37" y="68" font-size="26" text-anchor="middle">🧾</text></svg></div><div class="label"><h3>عروض الأسعار</h3><p>عرض سعر PDF باسمك</p><span class="tg">قريباً</span></div></div>
     </div>
-    <div class="steps-grid">
-      <div class="step">
-        <span class="ic">🧩</span>
-        <h3>اختر القالب</h3>
-        <p>مساعد مبيعات، رد على الاستفسارات، حجز مواعيد، أو إصدار عروض أسعار. <b>قوالب جاهزة</b> مجرّبة — ما في صفحة فاضية تحيّرك.</p>
-      </div>
-      <div class="step">
-        <span class="ic">📋</span>
-        <h3>اربط بضاعتك</h3>
-        <p>زر واحد يربط جدول بضاعتك في <b>جوجل شيتس</b>. الموظف يقرأ الأسعار والمخزون بنفسه — وأي تعديل في الجدول يعرفه فوراً.</p>
-      </div>
-      <div class="step">
-        <span class="ic">🔗</span>
-        <h3>انشر رابطك وارتاح</h3>
-        <p>خُد <b>رابطك ورمز QR</b> وانشرهم وين ما تحب. الزبون يكلّم الموظف من المتصفح، والطلبات تتسجل وتجيك تنبيه — كله من لوحة واحدة.</p>
-      </div>
-    </div>
+    <div class="shelf-wood"></div>
   </div>
 </section>
 
-<section id="templates">
+<section class="shop-sec">
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">القوالب</span>
-      <h2>موظف لكل شغلة</h2>
-      <p>ابدأ بواحد… وأضف غيره وقت ما تحتاج</p>
-    </div>
-    <div class="tpl-grid">
-      <div class="tpl"><span class="ic">🛍️</span><h3>مساعد المبيعات</h3><p>يعرض البضاعة، يسعّر، ويقفل الطلب مع عنوان التوصيل</p><span class="tag">الأكثر طلباً</span></div>
-      <div class="tpl"><span class="ic">💬</span><h3>خدمة الزبائن</h3><p>يجاوب على الأسئلة المتكررة من ملف معلومات محلّك</p><span class="tag">متاح</span></div>
-      <div class="tpl"><span class="ic">📅</span><h3>حجز المواعيد</h3><p>للعيادات والصالونات — يحجز مباشرة في تقويمك</p><span class="tag">متاح</span></div>
-      <div class="tpl"><span class="ic">🧾</span><h3>عروض الأسعار</h3><p>يجهّز عرض سعر PDF باسم شركتك في ثواني</p><span class="tag">قريباً</span></div>
+    <div class="sec-sign"><h2>كيف نشتغل<span class="u"></span></h2><span class="measure">٣ خطوات · ≈ ٥ دقائق</span></div>
+    <div class="notes">
+      <div class="note"><div class="n">١</div><h3>اختر القالب</h3><p>قالب جاهز لشغلتك. <b>ما في صفحة فاضية</b> تحيّرك.</p></div>
+      <div class="note"><div class="n">٢</div><h3>اربط بضاعتك</h3><p>زر واحد يربط جدولك في <b>جوجل شيتس</b> والموظف يعرف الأسعار بنفسه.</p></div>
+      <div class="note"><div class="n">٣</div><h3>انشر رابطك</h3><p>خُد <b>رابطك ورمز QR</b> والطلبات تتسجل وتجيك تنبيه.</p></div>
     </div>
   </div>
 </section>
 
-<section id="channels">
+<section class="shop-sec">
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">أين يشتغل؟</span>
-      <h2>في كل مكان… بدون أذونات</h2>
-      <p>ما عندك ارتباط بمنصة واحدة أو تحقق طويل</p>
-    </div>
-    <div class="ch-grid">
-      <div class="ch"><span class="ic">🔗</span><div><h3>رابط ورمز QR</h3><p>الأساس. رابط خاص بمحلك يفتح المحادثة في المتصفح — انشره في أي بايو أو استوري أو واجهة محل.</p></div></div>
-      <div class="ch"><span class="ic">✈️</span><div><h3>تليجرام (اختياري)</h3><p>قناة إضافية مجانية وفورية لمن يستخدم تليجرام — بضغطة زر، بدون تحقق.</p></div></div>
-      <div class="ch"><span class="ic">🌐</span><div><h3>موقعك الحالي</h3><p>عندك موقع؟ الصق سطراً واحداً ويظهر الموظف كنافذة محادثة في زاوية صفحتك.</p></div></div>
+    <div class="sec-sign"><h2>وين تلقاه<span class="u"></span></h2><span class="measure">٣ قنوات · بدون أذونات</span></div>
+    <div class="placards">
+      <div class="placard"><div class="ic">🔗</div><h3>رابط ورمز QR</h3><p>رابط خاص بمحلك يفتح المحادثة في المتصفح.</p></div>
+      <div class="placard"><div class="ic">✈️</div><h3>تليجرام (اختياري)</h3><p>قناة إضافية مجانية وفورية، بدون تحقق.</p></div>
+      <div class="placard"><div class="ic">🌐</div><h3>موقعك الحالي</h3><p>الصق سطراً واحداً ويظهر كنافذة محادثة.</p></div>
     </div>
   </div>
 </section>
 
-<section id="pricing">
+<section class="shop-sec">
   <div class="wrap">
-    <div class="sec-head">
-      <span class="eyebrow">الأسعار</span>
-      <h2>ادفع بقدر ما تستخدم</h2>
-      <p>الاشتراك بالرسائل — بدون مفاجآت</p>
+    <div class="board">
+      <div class="bh">قائمة الأسعار</div><div class="bsub">ادفع بقدر ما تستخدم — بدون مفاجآت</div>
+      <div class="row"><div><div class="name">تجربة</div><div class="feat">100 رسالة · موظف واحد · رابط + QR</div></div><div class="price">مجاناً</div></div>
+      <div class="row pick"><span class="star">الأنسب للمحلات</span><div><div class="name">مشروع</div><div class="feat">2,000 رسالة · كل القوالب · تليجرام · سجل طلبات</div></div><div class="price">$15 <small>/شهر</small></div></div>
+      <div class="row"><div><div class="name">شركة</div><div class="feat">8,000 رسالة · موظفون بلا حدود · ربط أنظمتك</div></div><div class="price">$40 <small>/شهر</small></div></div>
     </div>
-    <div class="price-grid">
-      <div class="plan">
-        <h3>تجربة</h3><div class="pr">مجاناً</div>
-        <ul><li>100 رسالة شهرياً</li><li>موظف واحد · قالب واحد</li><li>رابط + QR</li><li>ربط جوجل شيتس</li></ul>
-      </div>
-      <div class="plan hot">
-        <span class="badge">الأنسب للمحلات</span>
-        <h3>مشروع</h3><div class="pr">$15 <small>/ شهر</small></div>
-        <ul><li>2,000 رسالة شهرياً</li><li>موظفان · كل القوالب</li><li>رابط مخصص + QR + تليجرام</li><li>سجل طلبات + تنبيهات</li></ul>
-      </div>
-      <div class="plan">
-        <h3>شركة</h3><div class="pr">$40 <small>/ شهر</small></div>
-        <ul><li>8,000 رسالة شهرياً</li><li>موظفون بلا حدود</li><li>ربط أنظمتك الخاصة</li><li>دعم مباشر أولوية</li></ul>
-      </div>
-    </div>
-    <div class="pay-note">💳 الدفع بطرق تناسبك: <b>بنكك</b>، تحويل بنكي محلي، أو بطاقة دولية للمغتربين — ونفعّل حسابك خلال ساعات.</div>
+    <div class="pay-note">💳 الدفع بطرق تناسبك: <b>بنكك</b>، تحويل محلي، أو بطاقة دولية للمغتربين — ونفعّل حسابك خلال ساعات.</div>
   </div>
 </section>
 
-<section id="cta">
-  <div class="wrap cta-wrap">
-    <div class="cta-copy">
-      <h2>زبائنك بيكتبوا ليك هسّع…<br>منو البيرد عليهم؟</h2>
-      <p>سجّل اهتمامك وكن من أول 50 مشروعاً يجرّب الموظف الذكي مجاناً.</p>
-    </div>
-    <div class="form-card">
-      <!-- ▼▼ STEP 1: ضع رابط Formspree هنا (formspree.io → New form) ▼▼ -->
+<section class="shop-sec" id="order">
+  <div class="wrap order-grid">
+    <div class="order-copy"><div class="bell">🔔</div><h2>زبائنك بيكتبوا ليك هسّع… منو البيرد عليهم؟</h2><p>اترك طلبك عند الكاشير — وكن من أول 50 مشروعاً يجرّب الموظف مجاناً.</p></div>
+    <div class="pad">
+      <div class="spiral"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
+      <div class="ph">📝 دفتر الطلبات</div>
       <form id="signup" action="https://formspree.io/f/xlgkopoa" method="POST">
-        <label>الاسم
-          <input type="text" name="name" required placeholder="اسمك أو اسم محلك">
-        </label>
-        <label>رقم الواتساب
-          <input type="tel" name="whatsapp" required placeholder="09xxxxxxxx">
-        </label>
-        <label>نوع نشاطك
-          <select name="business" required>
-            <option value="" disabled selected>اختر…</option>
-            <option>متجر / بيع منتجات</option>
-            <option>مطعم / كافيه</option>
-            <option>عيادة / صالون</option>
-            <option>خدمات</option>
-            <option>أخرى</option>
-          </select>
-        </label>
-        <label>كم تدفع شهرياً مقابل موظف يرد على زبائنك؟
-          <select name="willingness_to_pay" required>
-            <option value="" disabled selected>اختر…</option>
-            <option>ما بدفع</option>
-            <option>$5 – $10</option>
-            <option>$10 – $20</option>
-            <option>أكثر من $20</option>
-          </select>
-        </label>
-        <button type="submit" class="btn">سجّلني في القائمة</button>
+        <label>الاسم<input type="text" name="name" required placeholder="اسمك أو اسم محلك"></label>
+        <label>رقم الواتساب<input type="tel" name="whatsapp" required placeholder="09xxxxxxxx"></label>
+        <label>نوع نشاطك<select name="business" required><option value="" disabled selected>اختر…</option><option>متجر / بيع منتجات</option><option>مطعم / كافيه</option><option>عيادة / صالون</option><option>خدمات</option><option>أخرى</option></select></label>
+        <label>كم تدفع شهرياً مقابل موظف يرد على زبائنك؟<select name="willingness_to_pay" required><option value="" disabled selected>اختر…</option><option>ما بدفع</option><option>$5 – $10</option><option>$10 – $20</option><option>أكثر من $20</option></select></label>
+        <button type="submit" class="btn">سجّل الطلب 🔔</button>
       </form>
-      <div class="form-done" id="formDone" hidden>
-        <div class="check">✓</div>
-        <h3>تم تسجيلك 🎉</h3>
-        <p>حنكلمك على الواتساب قريب جداً.</p>
-      </div>
+      <div class="form-done" id="formDone" hidden><div class="stamp">تم الطلب ✓</div><h3>سجّلناك 🎉</h3><p>حنكلمك على الواتساب قريب جداً.</p></div>
     </div>
   </div>
 </section>
 
-<footer><div class="wrap">موظّفك الذكي · صناعة سودانية <b>♥</b> · ٢٠٢٦</div></footer>
+<footer><div class="wrap"><span class="hours">المحل مفتوح ٢٤ ساعة</span>موظّفك الذكي · صناعة سودانية <b>♥</b> · ٢٠٢٦</div></footer>
 
-<script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+<script defer src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
 <script>
-// intro
-const intro=document.getElementById('intro');
-const killIntro=()=>intro.classList.add('gone');
-document.getElementById('skip').addEventListener('click',killIntro);
-setTimeout(killIntro,2700);
+var sh=document.getElementById('shutter'),sk=document.getElementById('skip');
+function openShop(){if(sh)sh.classList.add('gone');if(sk)sk.classList.add('gone');}
+if(sk)sk.addEventListener('click',openShop);setTimeout(openShop,2900);
+var QR_TARGET='https://mowazzaf.waleed-mohd.workers.dev';
+function renderQR(){var g=document.getElementById('qr');if(!g||typeof QRCode==='undefined')return;g.innerHTML='';new QRCode(g,{text:QR_TARGET,width:64,height:64,colorDark:'#3a2c1e',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});}
+if(document.readyState==='loading'){document.addEventListener('DOMContentLoaded',renderQR);}else{renderQR();}
 
-// ▼▼ STEP 2: بعد رفع الصفحة، ضع رابطها هنا ليصبح الـ QR قابلاً للمسح ▼▼
-const QR_TARGET='https://mowazzaf.waleed-mohd.workers.dev';
-(function(){
-  const g=document.getElementById('qr');if(!g||typeof QRCode==='undefined')return;
-  g.innerHTML='';
-  new QRCode(g,{text:QR_TARGET,width:98,height:98,colorDark:'#171b33',colorLight:'#ffffff',correctLevel:QRCode.CorrectLevel.M});
-})();
+// Arabic-Indic digits
+function ar(n){return String(n).replace(/[0-9]/g,function(d){return '٠١٢٣٤٥٦٧٨٩'[d];});}
+function arGroup(n){return ar(n.toLocaleString('en-US'));}
 
-// signup submission
-(function(){
-  const su=document.getElementById('signup');if(!su)return;
-  su.addEventListener('submit',async(e)=>{
-    e.preventDefault();
-    const done=document.getElementById('formDone');
-    if(su.action.includes('YOUR_FORM_ID')){su.hidden=true;done.hidden=false;return;} // (placeholder guard — now inactive, real endpoint set)
-    try{
-      const r=await fetch(su.action,{method:'POST',body:new FormData(su),headers:{'Accept':'application/json'}});
-      if(r.ok){su.hidden=true;done.hidden=false;}else{alert('صار خطأ بسيط، حاول تاني 🙏');}
-    }catch(_){alert('تأكد من اتصالك بالنت وحاول تاني 🙏');}
-  });
-})();
+var panel=document.getElementById('panel');
+function el(cls,html){var d=document.createElement('div');d.className=cls;if(html!=null)d.innerHTML=html;panel.appendChild(d);requestAnimationFrame(function(){requestAnimationFrame(function(){d.classList.add('show');});});return d;}
+function typingThen(cb,t){var x=document.createElement('div');x.className='b bot typing show';x.innerHTML='<i></i><i></i><i></i>';panel.appendChild(x);setTimeout(function(){x.remove();cb();},t||800);}
+function countUp(node,to,dur){var s=performance.now();function step(now){var p=Math.min((now-s)/dur,1);var v=Math.round(to*p);node.textContent=arGroup(v)+' ج';if(p<1)requestAnimationFrame(step);}requestAnimationFrame(step);}
 
-// chat demo loop
-const chat=document.getElementById('chat');
-const script=[
-  {cls:'cust',txt:'سلام عليكم 🌹 عندكم زيت سمسم؟ بكم اللتر؟',d:900},
-  {cls:'bot',txt:'وعليكم السلام، أهلاً بيك! موجود طازة 👌 اللتر بـ 12,000 جنيه. تحب كم لتر؟',d:1800,type:true},
-  {cls:'cust',txt:'اديني 3 لتر، والتوصيل لبحري',d:1700},
-  {cls:'bot',txt:'تمام ✅ 3 لتر = 36,000ج + توصيل بحري 2,000ج. المجموع 38,000ج — أأكد الطلب؟',d:2000,type:true},
-  {cls:'cust',txt:'أكّد ⭐',d:1400},
-  {cls:'sys',txt:'✓ سجّلت الطلب في جوجل شيتس · نبّهت صاحب المحل',d:1500},
-  {cls:'bot',txt:'اتأكد طلبك يا غالي 🙏 التوصيل بكرة قبل المغرب إن شاء الله',d:2200,type:true},
-];
-let idx=0;
-function nextMsg(){
-  if(idx>=script.length){setTimeout(()=>{chat.innerHTML='';idx=0;nextMsg();},3600);return;}
-  const m=script[idx];
-  const go=()=>{
-    const el=document.createElement('div');el.className='msg '+m.cls;el.textContent=m.txt;
-    chat.appendChild(el);
-    requestAnimationFrame(()=>requestAnimationFrame(()=>el.classList.add('show')));
-    chat.scrollTop=chat.scrollHeight;idx++;setTimeout(nextMsg,m.d);
-  };
-  if(m.type){
-    const t=document.createElement('div');t.className='msg bot show typing';t.innerHTML='<i></i><i></i><i></i>';
-    chat.appendChild(t);chat.scrollTop=chat.scrollHeight;
-    setTimeout(()=>{t.remove();go();},850);
-  }else{go();}
+function runSequence(){
+  panel.innerHTML='';
+  var steps=[
+    function(n){el('b cust','سلام عليكم 🌹 عندكم زيت سمسم؟ بكم اللتر؟');setTimeout(n,1100);},
+    function(n){typingThen(function(){el('b bot','أهلاً بيك! موجود طازة 👌 اللتر بـ ١٢٬٠٠٠ جنيه. كم لتر تحب؟');setTimeout(n,1400);});},
+    function(n){el('b cust','٣ لتر، توصيل لبحري');setTimeout(n,1100);},
+    function(n){ // ميزان / وزن
+      var s=el('scale','<svg width="40" height="40" viewBox="0 0 40 40"><line x1="20" y1="6" x2="20" y2="30" stroke="#8a4f2c" stroke-width="2"/><path d="M8 14 H32" stroke="#8a4f2c" stroke-width="2"/><path d="M8 14 a6 6 0 0 0 12 0Z" fill="#cfe3d8" stroke="#2f8a64" stroke-width="1.5"/><path d="M20 14 a6 6 0 0 0 12 0Z" fill="#fbe6e7" stroke="#c0484e" stroke-width="1.5"/><rect x="12" y="30" width="16" height="3" rx="1.5" fill="#8a4f2c"/></svg><div class="rd">٣٫٠ لتر <small>الوزن مضبوط · جاهز للتغليف</small></div>');setTimeout(n,1300);},
+    function(n){ // مقاسات / حساب / فلوس
+      var c=el('calc','<div class="ln"><span>٣ لتر × ١٢٬٠٠٠</span><span>٣٦٬٠٠٠ ج</span></div><div class="ln"><span>توصيل بحري</span><span>٢٬٠٠٠ ج</span></div><div class="ln"><span>الإجمالي</span><span id="ttl">٠ ج</span></div>');
+      setTimeout(function(){countUp(document.getElementById('ttl'),38000,900);},250);setTimeout(n,1700);},
+    function(n){typingThen(function(){el('b bot','المجموع ٣٨٬٠٠٠ ج — أأكد وأرسل لك رابط الدفع بنكك؟');setTimeout(n,1400);});},
+    function(n){el('b cust','أكّد ⭐');setTimeout(n,1100);},
+    function(n){ // تعاملات بنكية بالتطبيقات
+      el('bankak','<div class="top"><div class="logo">ب</div><b>بنكك · Bankak</b><span>الآن</span></div><div class="amt">+ ٣٨٬٠٠٠ ج</div><div class="st">✓ تم استلام الدفع من زبون متجر النيل</div>');
+      setTimeout(n,1900);},
+    function(n){typingThen(function(){el('b bot','اتأكد طلبك يا غالي 🙏 التوصيل بكرة إن شاء الله');setTimeout(n,2200);});}
+  ];
+  var i=0;(function go(){if(i>=steps.length){setTimeout(runSequence,3200);return;}var f=steps[i++];f(go);})();
 }
-setTimeout(nextMsg,2900);
+setTimeout(runSequence,3100);
+
+var su=document.getElementById('signup');
+if(su){su.addEventListener('submit',function(e){e.preventDefault();var done=document.getElementById('formDone');
+ if(su.action.indexOf('YOUR_FORM_ID')>-1){su.hidden=true;done.hidden=false;return;}
+ fetch(su.action,{method:'POST',body:new FormData(su),headers:{'Accept':'application/json'}})
+  .then(function(r){if(r.ok){su.hidden=true;done.hidden=false;}else{alert('صار خطأ بسيط، حاول تاني 🙏');}})
+  .catch(function(){alert('تأكد من اتصالك وحاول تاني 🙏');});});}
 </script>
 </body>
 </html>
