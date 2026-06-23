@@ -1,0 +1,921 @@
+<!DOCTYPE html>
+<html dir="rtl" lang="ar">
+<head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>منصة المصممين السودانيين | اكتشف الإبداع السوداني</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Inter:wght@400;500;600;700&family=Noto+Kufi+Arabic:wght@400;600;700&display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+  tailwind.config = {
+    darkMode: "class",
+    theme: {
+      extend: {
+        "colors": {
+          "primary": "#d33f24",
+          "on-primary": "#ffffff",
+          "primary-container": "#fceee9",
+          "on-primary-container": "#2f150d",
+          "secondary": "#a06d5c",
+          "on-secondary": "#ffffff",
+          "background": "#fbf9f4",
+          "surface": "#ffffff",
+          "on-surface": "#2c2624",
+          "on-surface-variant": "#5a4d49",
+          "outline": "#d8d0cd",
+          "outline-variant": "#e9e4e2",
+          "surface-container": "#f4f0ef",
+          "clay-accent": "#7b4a35"
+        },
+        "borderRadius": {
+          "DEFAULT": "0.25rem",
+          "lg": "0.5rem",
+          "xl": "0.75rem",
+          "2xl": "1rem",
+          "full": "9999px"
+        },
+        "fontFamily": {
+          "label-sm":  ["Noto Kufi Arabic", "sans-serif"],
+          "label-md":  ["Noto Kufi Arabic", "sans-serif"],
+          "body-lg":   ["Noto Kufi Arabic", "sans-serif"],
+          "headline-md": ["Noto Kufi Arabic", "sans-serif"]
+        },
+        "boxShadow": {
+          "raised":       "0 20px 25px -5px rgba(123,74,53,0.10), 0 10px 10px -5px rgba(123,74,53,0.04)",
+          "raised-hover": "0 25px 50px -12px rgba(123,74,53,0.15)",
+          "card-sm":      "0 4px 6px -1px rgba(123,74,53,0.10), 0 2px 4px -1px rgba(123,74,53,0.06)"
+        }
+      }
+    }
+  }
+</script>
+<style>
+  /* ─── Base ─── */
+  body { font-family: 'Noto Kufi Arabic', sans-serif; background-color: #fbf9f4; }
+  .material-symbols-outlined {
+    font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+    vertical-align: middle;
+  }
+
+  /* ─── Elevation levels (matching styleguide) ─── */
+  /* Level 0 – flat */
+  .el-0 { box-shadow: none; }
+  /* Level 1 – low shadow */
+  .el-1 { box-shadow: 0 4px 6px -1px rgba(123,74,53,.10), 0 2px 4px -1px rgba(123,74,53,.06); }
+  /* Level 2 – medium shadow  ← sidebar cards, default raised-card */
+  .el-2 { box-shadow: 0 20px 25px -5px rgba(123,74,53,.10), 0 10px 10px -5px rgba(123,74,53,.04); }
+  /* Level 3 – high shadow  ← hero cards, hover state */
+  .el-3 { box-shadow: 0 25px 50px -12px rgba(123,74,53,.15); }
+
+  /* Raised card — same as original HTML, Level 2 → Level 3 on hover */
+  .raised-card {
+    background: white;
+    box-shadow: 0 20px 25px -5px rgba(123,74,53,.10), 0 10px 10px -5px rgba(123,74,53,.04);
+    border-radius: 16px;
+    transition: box-shadow .4s cubic-bezier(.4,0,.2,1), transform .4s cubic-bezier(.4,0,.2,1);
+  }
+  .raised-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 25px 50px -12px rgba(123,74,53,.15);
+  }
+
+  /* Work card — Level 1 → Level 3 on hover */
+  .work-card {
+    background: white;
+    border-radius: 16px;
+    overflow: hidden;
+    box-shadow: 0 4px 6px -1px rgba(123,74,53,.08), 0 2px 4px -1px rgba(123,74,53,.05);
+    transition: box-shadow .35s cubic-bezier(.4,0,.2,1), transform .35s cubic-bezier(.4,0,.2,1);
+    cursor: pointer;
+    break-inside: avoid;
+    margin-bottom: 20px;
+    display: inline-block;
+    width: 100%;
+  }
+  .work-card:hover {
+    transform: translateY(-6px);
+    box-shadow: 0 25px 50px -12px rgba(123,74,53,.18);
+  }
+
+  /* Service box (from original) */
+  .service-box {
+    background: white;
+    border: 1px solid #e9e4e2;
+    box-shadow: 0 4px 6px -1px rgba(123,74,53,.05);
+    transition: all .3s ease;
+  }
+  .service-box:hover {
+    border-color: #d33f24;
+    box-shadow: 0 10px 15px -3px rgba(123,74,53,.10);
+  }
+
+  /* CSS-columns masonry */
+  .portfolio-grid { column-count: 3; column-gap: 20px; }
+  @media (max-width: 1024px) { .portfolio-grid { column-count: 2; } }
+  @media (max-width: 640px)  { .portfolio-grid { column-count: 1; } }
+
+  /* Search bar */
+  .search-bar {
+    background: #f4f0ef;
+    border: 1.5px solid #e9e4e2;
+    border-radius: 50px;
+    transition: all .2s ease;
+  }
+  .search-bar:focus-within {
+    background: white;
+    border-color: #d33f24;
+    box-shadow: 0 0 0 3px rgba(211,63,36,.12);
+  }
+
+  /* Category chips */
+  .cat-chip {
+    background: white;
+    border: 1.5px solid #e9e4e2;
+    border-radius: 50px;
+    padding: 7px 18px;
+    font-weight: 700;
+    font-size: 12.5px;
+    color: #5a4d49;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: all .2s ease;
+    box-shadow: 0 2px 4px rgba(123,74,53,.06);
+    font-family: 'Noto Kufi Arabic', sans-serif;
+  }
+  .cat-chip:hover, .cat-chip.active {
+    background: #d33f24;
+    border-color: #d33f24;
+    color: white;
+    box-shadow: 0 4px 14px rgba(211,63,36,.30);
+  }
+
+  /* Upvote button */
+  .upvote-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 5px;
+    padding: 6px 13px;
+    border-radius: 50px;
+    background: white;
+    border: 1.5px solid #e9e4e2;
+    font-weight: 700;
+    font-size: 12px;
+    color: #5a4d49;
+    cursor: pointer;
+    transition: all .2s ease;
+    box-shadow: 0 2px 4px rgba(123,74,53,.07);
+    font-family: 'Noto Kufi Arabic', sans-serif;
+  }
+  .upvote-btn:hover { border-color: #d33f24; color: #d33f24; }
+  .upvote-btn.voted { background: #d33f24; border-color: #d33f24; color: white; }
+
+  /* Trend tags */
+  .trend-tag {
+    display: inline-flex;
+    padding: 5px 12px;
+    background: #f4f0ef;
+    border: 1px solid #e9e4e2;
+    border-radius: 8px;
+    font-size: 11.5px;
+    font-weight: 600;
+    color: #5a4d49;
+    cursor: pointer;
+    transition: all .2s ease;
+  }
+  .trend-tag:hover { border-color: #d33f24; color: #d33f24; background: #fceee9; }
+
+  /* Designer row */
+  .designer-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 10px 8px;
+    border-radius: 12px;
+    cursor: pointer;
+    transition: background .2s;
+  }
+  .designer-row:hover { background: #f4f0ef; }
+
+  /* Hero card */
+  .hero-card {
+    border-radius: 20px;
+    overflow: hidden;
+    box-shadow: 0 25px 50px -12px rgba(123,74,53,.18);
+    cursor: pointer;
+    transition: box-shadow .35s ease, transform .35s ease;
+  }
+  .hero-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 32px 64px -12px rgba(123,74,53,.22);
+  }
+
+  /* Stat box */
+  .stat-box {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 14px 16px;
+    background: #f4f0ef;
+    border-radius: 12px;
+  }
+
+  /* Scrollbar hide */
+  .no-scroll::-webkit-scrollbar { display: none; }
+  .no-scroll { -ms-overflow-style: none; scrollbar-width: none; }
+</style>
+</head>
+<body class="text-on-surface">
+
+<!-- ════════════════════════════════════════
+     STICKY HEADER
+════════════════════════════════════════ -->
+<header class="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-outline-variant"
+        style="box-shadow:0 4px 6px -1px rgba(123,74,53,.07)">
+  <div class="flex flex-row-reverse items-center gap-4 w-full px-4 md:px-16 py-3 max-w-[1200px] mx-auto">
+
+    <!-- Logo -->
+    <div class="flex flex-col items-end flex-shrink-0">
+      <div class="font-headline-md text-lg font-bold text-clay-accent leading-none">منصة المصممين السودانيين</div>
+      <div class="text-[10px] text-on-surface-variant font-medium mt-0.5">ملتقى الإبداع والمهارة</div>
+    </div>
+
+    <!-- Search (desktop) -->
+    <div class="search-bar flex-1 hidden md:flex items-center gap-2 px-4 py-2.5">
+      <span class="material-symbols-outlined text-on-surface-variant" style="font-size:20px">search</span>
+      <input class="flex-1 bg-transparent outline-none text-sm text-on-surface placeholder:text-on-surface-variant/60"
+             placeholder="ابحث عن مصمم، عمل، أو تخصص..." type="text"/>
+      <kbd class="text-[11px] text-on-surface-variant/50 bg-outline-variant/50 px-1.5 py-0.5 rounded font-medium">⌘K</kbd>
+    </div>
+
+    <!-- Nav -->
+    <nav class="hidden md:flex gap-6 items-center text-sm flex-shrink-0 font-label-md">
+      <a class="text-clay-accent border-b-2 border-clay-accent font-bold pb-0.5" href="#">اكتشاف</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-semibold" href="sdpdesignportfolio.html">المصممون</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-semibold" href="#">وظائف</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors font-semibold" href="#">رفع عمل</a>
+    </nav>
+
+    <!-- Actions -->
+    <div class="flex items-center gap-3 flex-shrink-0">
+      <button class="hidden md:flex items-center gap-1.5 bg-primary text-on-primary px-5 py-2 rounded-lg text-sm font-bold hover:opacity-90 transition-all active:scale-95"
+              style="box-shadow:0 4px 14px rgba(211,63,36,.32)">
+        <span class="material-symbols-outlined" style="font-size:16px">add</span>
+        نشر عملك
+      </button>
+      <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors md:hidden">search</span>
+      <span class="material-symbols-outlined text-on-surface-variant cursor-pointer hover:text-primary transition-colors">notifications</span>
+      <div class="w-9 h-9 rounded-full overflow-hidden border-2 border-outline cursor-pointer hover:border-primary transition-colors flex-shrink-0">
+        <img alt="حسابي" class="w-full h-full object-cover"
+             src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd0CxFZq57sdDGKF5XokmL1pKcXyWWKnjj2Flg19DylN6zPpjf_4D-GZ_o1ciNeHLUOLDANJpj7NiHrkIcFEN5QUoPPSZE-JvUsvCYdjLk0OxKV1pXCRjSpJs93e6A8nNZVo82iYzIn2-oz4tncVJEq77RzdufIsQ7YgfXM3bp25t0-kL6b9CC2O5rjzkShc7shcP7pYRVJUb2aw6AIEIRT25_2xWcmb2RRQTp9AH0BcjQl4Zop1w1LIuD7oeLJtwFI_oyzXvm4hQ"/>
+      </div>
+    </div>
+
+  </div>
+</header>
+
+<!-- ════════════════════════════════════════
+     STICKY CATEGORY FILTER STRIP
+════════════════════════════════════════ -->
+<div class="sticky top-[61px] z-40 bg-background/96 backdrop-blur-sm border-b border-outline-variant">
+  <div class="max-w-[1200px] mx-auto px-4 md:px-16">
+    <div class="flex items-center gap-2.5 py-3 overflow-x-auto no-scroll">
+      <button class="cat-chip active">✦ الكل</button>
+      <button class="cat-chip">تصميم واجهات</button>
+      <button class="cat-chip">هوية بصرية</button>
+      <button class="cat-chip">تايبوغرافي عربي</button>
+      <button class="cat-chip">رسم توضيحي</button>
+      <button class="cat-chip">موشن جرافيك</button>
+      <button class="cat-chip">تصوير</button>
+      <button class="cat-chip">تصميم الويب</button>
+      <button class="cat-chip">زخارف نوبية</button>
+      <button class="cat-chip">تصميم أزياء</button>
+    </div>
+  </div>
+</div>
+
+<main class="max-w-[1200px] mx-auto px-4 md:px-16 py-10">
+
+  <!-- ════════════════════════════════════════
+       HERO — FEATURED WORKS OF THE WEEK
+  ════════════════════════════════════════ -->
+  <section class="mb-12">
+    <div class="flex items-center justify-between mb-5">
+      <a class="text-sm font-bold text-primary flex items-center gap-1 hover:gap-2 transition-all" href="#">
+        عرض الكل <span class="material-symbols-outlined" style="font-size:16px">arrow_back</span>
+      </a>
+      <h2 class="text-2xl font-bold text-clay-accent flex items-center gap-2">
+        <span class="material-symbols-outlined text-primary"
+              style="font-size:22px;font-variation-settings:'FILL' 1">auto_awesome</span>
+        أعمال الأسبوع المميزة
+      </h2>
+    </div>
+
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-5">
+
+      <!-- Main hero (2 cols) -->
+      <div class="md:col-span-2 hero-card group" style="height:380px">
+        <div class="relative w-full h-full">
+          <img alt="تطبيق بسمة"
+               class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+               src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYq2AEcZ14Gopx9huo2EdYVFBLnGID4LoFb_RY5DyvDkNVOlwptEESPsgzeMAMP9MfwCXa557WAaFpWhvbaM-uqmsC7umb3EcDslzb3bZ3zbFqF5YF7uI74riLooArYpx3xwGp1LtEzQv3Dz3mEhBZpuOj69NqsUJriZMMFXdJWCrqGUENqqjeQfFnVEEDz28Mjfe1TDSw6QQOG411Ta8FuXryvJw4f734t_pOnWR3wOdC88dqBXsfOlhUZiHztJHAfVdCya5UbQk"/>
+          <div class="absolute inset-0 bg-gradient-to-t from-black/80 via-black/20 to-transparent"></div>
+          <div class="absolute top-4 right-4 bg-primary text-white text-xs font-bold px-3 py-1.5 rounded-full flex items-center gap-1.5"
+               style="box-shadow:0 4px 14px rgba(211,63,36,.45)">
+            <span class="material-symbols-outlined" style="font-size:14px;font-variation-settings:'FILL' 1">stars</span>
+            عمل مميز
+          </div>
+          <div class="absolute bottom-0 right-0 left-0 p-6">
+            <div class="flex items-end justify-between">
+              <div class="flex items-center gap-3">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:14px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span>
+                  ٢٤٥
+                </button>
+                <div class="flex items-center gap-1 text-white/75 text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:14px">visibility</span> ١٢.٣ ألف
+                </div>
+              </div>
+              <div class="text-right">
+                <h3 class="text-white text-xl font-bold mb-2 leading-snug">تطبيق بسمة — رعاية صحية رقمية</h3>
+                <div class="flex items-center gap-2 justify-end">
+                  <span class="text-white/80 text-sm font-medium">أحمد عثمان</span>
+                  <img alt="أحمد" class="w-8 h-8 rounded-full border-2 border-white/60 object-cover"
+                       src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd0CxFZq57sdDGKF5XokmL1pKcXyWWKnjj2Flg19DylN6zPpjf_4D-GZ_o1ciNeHLUOLDANJpj7NiHrkIcFEN5QUoPPSZE-JvUsvCYdjLk0OxKV1pXCRjSpJs93e6A8nNZVo82iYzIn2-oz4tncVJEq77RzdufIsQ7YgfXM3bp25t0-kL6b9CC2O5rjzkShc7shcP7pYRVJUb2aw6AIEIRT25_2xWcmb2RRQTp9AH0BcjQl4Zop1w1LIuD7oeLJtwFI_oyzXvm4hQ"/>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Side hero cards -->
+      <div class="flex flex-col gap-5">
+        <div class="hero-card group flex-1">
+          <div class="relative w-full" style="height:178px">
+            <img alt="هوية نيل الذهبي"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmoEkR2mhf0mmrasZkh1nefe_0nTVjAmpGgVZFjelTLYlTUQadigbU1xqsjuP7P3dVHsumHTkZw6dg1eaGs2KxN6s7ZFNn5hKftmT3fk-oDPTBXn31_SUzQ7DiLaeruoLj2Kr2L6xJOOO5ft2_2CIRaL_xYFeTunzY9ai_ly_Ih-UeYxO4sJjrJM42qCJ_6mqWJ28o68weqg6ggmQDxnpETaSspB2-Gy2ML5N5AodKOvOUSlYmJkE1gaydLOmzyfEhNBORgEI6dEA"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+            <div class="absolute top-3 right-3 bg-primary/90 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full">هوية بصرية</div>
+            <div class="absolute bottom-3 right-3 left-3 flex items-center justify-between">
+              <div class="flex items-center gap-1 text-white/75 text-xs font-semibold">
+                <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ١٨٩
+              </div>
+              <span class="text-white text-sm font-bold">هوية نيل الذهبي</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="hero-card group flex-1">
+          <div class="relative w-full" style="height:178px">
+            <img alt="تاكسي الخرطوم"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY6pw_Tp0gO-5pz0__fHStHNwvrGGVPcltcXyjooPQ90jJ2yChZ8C5RzZW4n5jyb9JhAKA1IWvA3TdzzcX9ze_-zQnxqw-PoN5u9DXJ4eB8tYi4RkbKQXVJVRh7jHTcz1PL6hbKrUnhbZT4N2h1cZ3N7xvx-8kH9AyuiNvdFdJgW-xUYzbn14xestiE-O9MAM8swXSKN2g1fYsdt5d-AzGSXaJ7ZFyF2K1cMQdSIPdKo9T_lRKuoGrw5qrRB989AJSrqmAh3ZL1co"/>
+            <div class="absolute inset-0 bg-gradient-to-t from-black/70 to-transparent"></div>
+            <div class="absolute top-3 right-3 bg-clay-accent/90 backdrop-blur-sm text-white text-[10px] font-bold px-2.5 py-1 rounded-full">تصميم واجهات</div>
+            <div class="absolute bottom-3 right-3 left-3 flex items-center justify-between">
+              <div class="flex items-center gap-1 text-white/75 text-xs font-semibold">
+                <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٣١٢
+              </div>
+              <span class="text-white text-sm font-bold">تاكسي الخرطوم UI</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ════════════════════════════════════════
+       MAIN: MASONRY GRID + SIDEBAR
+  ════════════════════════════════════════ -->
+  <div class="grid grid-cols-1 lg:grid-cols-12 gap-8 items-start">
+
+    <!-- ── Portfolio Grid (9 cols) ── -->
+    <div class="lg:col-span-9 order-2 lg:order-1">
+
+      <!-- Sort bar -->
+      <div class="flex items-center justify-between mb-6">
+        <span class="text-sm text-on-surface-variant">٢٤٠+ عمل إبداعي</span>
+        <div class="flex items-center gap-1 text-sm">
+          <span class="text-on-surface-variant ml-2 font-medium">ترتيب:</span>
+          <button class="font-bold text-primary border-b-2 border-primary pb-0.5 px-2">الأحدث</button>
+          <button class="text-on-surface-variant hover:text-primary px-2 transition-colors">الأعلى تقييماً</button>
+          <button class="text-on-surface-variant hover:text-primary px-2 transition-colors">الأكثر مشاهدة</button>
+        </div>
+      </div>
+
+      <!-- Masonry -->
+      <div class="portfolio-grid">
+
+        <!-- ── Card 1: UI App ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:220px">
+            <img alt="بسمة هيلث"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYq2AEcZ14Gopx9huo2EdYVFBLnGID4LoFb_RY5DyvDkNVOlwptEESPsgzeMAMP9MfwCXa557WAaFpWhvbaM-uqmsC7umb3EcDslzb3bZ3zbFqF5YF7uI74riLooArYpx3xwGp1LtEzQv3Dz3mEhBZpuOj69NqsUJriZMMFXdJWCrqGUENqqjeQfFnVEEDz28Mjfe1TDSw6QQOG411Ta8FuXryvJw4f734t_pOnWR3wOdC88dqBXsfOlhUZiHztJHAfVdCya5UbQk"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-primary text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">تصميم واجهات</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">تطبيق بسمة لرعاية الصحة الرقمية</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٢٤٥
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ٨.٢ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">أحمد عثمان</span>
+                <img alt="أحمد" class="w-7 h-7 rounded-full object-cover border border-outline"
+                     src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd0CxFZq57sdDGKF5XokmL1pKcXyWWKnjj2Flg19DylN6zPpjf_4D-GZ_o1ciNeHLUOLDANJpj7NiHrkIcFEN5QUoPPSZE-JvUsvCYdjLk0OxKV1pXCRjSpJs93e6A8nNZVo82iYzIn2-oz4tncVJEq77RzdufIsQ7YgfXM3bp25t0-kL6b9CC2O5rjzkShc7shcP7pYRVJUb2aw6AIEIRT25_2xWcmb2RRQTp9AH0BcjQl4Zop1w1LIuD7oeLJtwFI_oyzXvm4hQ"/>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 2: Branding (taller) ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:290px">
+            <img alt="هوية نيل الذهبي"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmoEkR2mhf0mmrasZkh1nefe_0nTVjAmpGgVZFjelTLYlTUQadigbU1xqsjuP7P3dVHsumHTkZw6dg1eaGs2KxN6s7ZFNn5hKftmT3fk-oDPTBXn31_SUzQ7DiLaeruoLj2Kr2L6xJOOO5ft2_2CIRaL_xYFeTunzY9ai_ly_Ih-UeYxO4sJjrJM42qCJ_6mqWJ28o68weqg6ggmQDxnpETaSspB2-Gy2ML5N5AodKOvOUSlYmJkE1gaydLOmzyfEhNBORgEI6dEA"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-clay-accent text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">هوية بصرية</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">هوية نيل الذهبي للمنتجات الطبيعية</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ١٨٩
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ٥.٧ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">مريم حسن</span>
+                <div class="w-7 h-7 rounded-full bg-primary-container border border-outline flex items-center justify-center text-primary text-xs font-bold">م</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 3: Transport App ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:240px">
+            <img alt="تاكسي الخرطوم"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuDY6pw_Tp0gO-5pz0__fHStHNwvrGGVPcltcXyjooPQ90jJ2yChZ8C5RzZW4n5jyb9JhAKA1IWvA3TdzzcX9ze_-zQnxqw-PoN5u9DXJ4eB8tYi4RkbKQXVJVRh7jHTcz1PL6hbKrUnhbZT4N2h1cZ3N7xvx-8kH9AyuiNvdFdJgW-xUYzbn14xestiE-O9MAM8swXSKN2g1fYsdt5d-AzGSXaJ7ZFyF2K1cMQdSIPdKo9T_lRKuoGrw5qrRB989AJSrqmAh3ZL1co"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-primary text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">تصميم واجهات</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">تاكسي الخرطوم — التنقل الذكي</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٣١٢
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ١١.٨ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">عمر الأمين</span>
+                <div class="w-7 h-7 rounded-full bg-clay-accent/10 border border-outline flex items-center justify-center text-clay-accent text-xs font-bold">ع</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 4: Arabic Typography (generative) ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:310px; background:linear-gradient(135deg,#2c2624 0%,#7b4a35 100%)">
+            <div class="absolute inset-0 flex items-center justify-center p-6 select-none">
+              <div class="text-center">
+                <div class="text-white font-bold leading-none mb-3" style="font-size:54px;text-shadow:0 4px 24px rgba(0,0,0,.4)">السودان</div>
+                <div class="text-primary font-bold mb-4" style="font-size:22px">أرض الذهب والحضارة</div>
+                <div class="flex justify-center gap-2">
+                  <div class="w-2 h-2 rounded-full bg-primary opacity-80"></div>
+                  <div class="w-10 h-2 rounded-full bg-white/30"></div>
+                  <div class="w-2 h-2 rounded-full bg-primary opacity-80"></div>
+                </div>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/15 backdrop-blur-sm text-white text-[11px] font-bold px-2.5 py-1 rounded-full border border-white/20">تايبوغرافي</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">تصميم تايبوغرافي — أرض الذهب والحضارة</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٤٢١
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ١٦.٥ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">كريم عبدالله</span>
+                <div class="w-7 h-7 rounded-full bg-on-surface/10 border border-outline flex items-center justify-center text-on-surface text-xs font-bold">ك</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 5: Shipping Graphic ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:210px">
+            <img alt="خدمات شحن"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZhz-5vRuwtA_69YR7OT_R0HFMfWLPKN5NkyrzZ2uRv1XOVwNt84dM8VuRIYPVyk8__o-DHKnaOpLx4JODJLCJoBGVNU3i3etJyUUEzCWBpxRmYUp7PtSUZ94vqaxPkzP3nVLOHtTBULaHuZEN5wtkZAHP483M1Z_mowEivm7i2vj4efK1qMneXX5K2zB3qqCJimhalybdpBYf3QKlTgnjy7JZXXu7GJs53GJjmiD2yt58YbhNRQAaor_Nm6ZYG2RR8W44nlxlPoo"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-clay-accent text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">تصميم جرافيك</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">خدمات الشحن السريع — هوية وتصميم</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ١٤٧
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ٤.٣ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">هالة يوسف</span>
+                <div class="w-7 h-7 rounded-full bg-secondary/15 border border-outline flex items-center justify-center text-secondary text-xs font-bold">هـ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 6: Nubian Ornament (generative) ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:260px; background:linear-gradient(135deg,#fceee9 0%,#fbf9f4 100%)">
+            <div class="absolute inset-0 flex items-center justify-center select-none" style="opacity:.9">
+              <div class="text-center">
+                <div style="font-size:60px;color:#d33f24;line-height:1">✦</div>
+                <div class="flex gap-3 justify-center mt-1">
+                  <span style="font-size:30px;color:#7b4a35">◆</span>
+                  <span style="font-size:38px;color:#d33f24">◆</span>
+                  <span style="font-size:30px;color:#7b4a35">◆</span>
+                </div>
+                <div class="flex gap-2 justify-center mt-2">
+                  <span style="font-size:18px;color:#a06d5c">▲</span>
+                  <span style="font-size:18px;color:#d33f24">▲</span>
+                  <span style="font-size:18px;color:#7b4a35">▲</span>
+                  <span style="font-size:18px;color:#d33f24">▲</span>
+                  <span style="font-size:18px;color:#a06d5c">▲</span>
+                </div>
+                <div class="mt-3 text-clay-accent font-bold text-sm tracking-widest opacity-50">نوبي · كوش · مروي</div>
+              </div>
+            </div>
+            <div class="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-clay-accent text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">زخارف نوبية</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">مكتبة الزخارف النوبية الرقمية</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٥٠٦
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ٢٢.١ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">نور الدين محمد</span>
+                <div class="w-7 h-7 rounded-full bg-clay-accent/10 border border-outline flex items-center justify-center text-clay-accent text-xs font-bold">ن</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 7: Restaurant Brand ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:250px">
+            <img alt="هوية مطعم"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBmoEkR2mhf0mmrasZkh1nefe_0nTVjAmpGgVZFjelTLYlTUQadigbU1xqsjuP7P3dVHsumHTkZw6dg1eaGs2KxN6s7ZFNn5hKftmT3fk-oDPTBXn31_SUzQ7DiLaeruoLj2Kr2L6xJOOO5ft2_2CIRaL_xYFeTunzY9ai_ly_Ih-UeYxO4sJjrJM42qCJ_6mqWJ28o68weqg6ggmQDxnpETaSspB2-Gy2ML5N5AodKOvOUSlYmJkE1gaydLOmzyfEhNBORgEI6dEA"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-clay-accent text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">هوية بصرية</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">هوية مطعم أم درمان — المأكولات التقليدية</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٢٧٨
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ٩.٤ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">سارة إبراهيم</span>
+                <div class="w-7 h-7 rounded-full bg-secondary/15 border border-outline flex items-center justify-center text-secondary text-xs font-bold">س</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 8: Motion (with play badge) ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:230px">
+            <img alt="موشن جرافيك"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuAZhz-5vRuwtA_69YR7OT_R0HFMfWLPKN5NkyrzZ2uRv1XOVwNt84dM8VuRIYPVyk8__o-DHKnaOpLx4JODJLCJoBGVNU3i3etJyUUEzCWBpxRmYUp7PtSUZ94vqaxPkzP3nVLOHtTBULaHuZEN5wtkZAHP483M1Z_mowEivm7i2vj4efK1qMneXX5K2zB3qqCJimhalybdpBYf3QKlTgnjy7JZXXu7GJs53GJjmiD2yt58YbhNRQAaor_Nm6ZYG2RR8W44nlxlPoo"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">مشاهدة الفيديو</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-primary text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">موشن جرافيك</span>
+            <div class="absolute bottom-3 left-3 bg-black/55 backdrop-blur-sm text-white rounded-full p-1.5">
+              <span class="material-symbols-outlined" style="font-size:16px;font-variation-settings:'FILL' 1">play_arrow</span>
+            </div>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">أنيميشن — رحلة عبر حضارة كوش</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٣٨٩
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ١٤.٨ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">هالة يوسف</span>
+                <div class="w-7 h-7 rounded-full bg-secondary/15 border border-outline flex items-center justify-center text-secondary text-xs font-bold">هـ</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- ── Card 9: Payment Platform ── -->
+        <div class="work-card group">
+          <div class="relative overflow-hidden" style="height:220px">
+            <img alt="منصة دفع"
+                 class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-700"
+                 src="https://lh3.googleusercontent.com/aida-public/AB6AXuBYq2AEcZ14Gopx9huo2EdYVFBLnGID4LoFb_RY5DyvDkNVOlwptEESPsgzeMAMP9MfwCXa557WAaFpWhvbaM-uqmsC7umb3EcDslzb3bZ3zbFqF5YF7uI74riLooArYpx3xwGp1LtEzQv3Dz3mEhBZpuOj69NqsUJriZMMFXdJWCrqGUENqqjeQfFnVEEDz28Mjfe1TDSw6QQOG411Ta8FuXryvJw4f734t_pOnWR3wOdC88dqBXsfOlhUZiHztJHAfVdCya5UbQk"/>
+            <div class="absolute inset-0 bg-primary/35 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center backdrop-blur-[1.5px]">
+              <span class="bg-white text-primary text-sm font-bold px-6 py-2.5 rounded-full shadow-xl translate-y-3 group-hover:translate-y-0 transition-transform duration-300">عرض العمل</span>
+            </div>
+            <span class="absolute top-3 right-3 bg-white/90 text-primary text-[11px] font-bold px-2.5 py-1 rounded-full shadow-sm">تصميم واجهات</span>
+          </div>
+          <div class="p-4">
+            <h4 class="font-bold text-sm text-on-surface mb-3 text-right leading-snug">منصة الدفع الإلكتروني السوداني</h4>
+            <div class="flex items-center justify-between">
+              <div class="flex items-center gap-2">
+                <button class="upvote-btn">
+                  <span class="material-symbols-outlined" style="font-size:13px;font-variation-settings:'FILL' 1">keyboard_arrow_up</span> ٢٠٣
+                </button>
+                <div class="flex items-center gap-1 text-on-surface-variant text-xs font-semibold">
+                  <span class="material-symbols-outlined" style="font-size:13px">visibility</span> ٧.١ك
+                </div>
+              </div>
+              <div class="flex items-center gap-2">
+                <span class="text-on-surface-variant text-xs font-medium">طارق مصطفى</span>
+                <div class="w-7 h-7 rounded-full bg-primary-container border border-outline flex items-center justify-center text-primary text-xs font-bold">ط</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div><!-- /portfolio-grid -->
+
+      <!-- Load more -->
+      <div class="mt-10 text-center">
+        <button class="border-2 border-outline-variant text-on-surface-variant px-14 py-4 rounded-2xl font-bold hover:bg-surface-container hover:border-outline transition-all flex items-center gap-3 mx-auto"
+                style="box-shadow:0 4px 6px -1px rgba(123,74,53,.07)">
+          <span class="material-symbols-outlined">expand_more</span>
+          تحميل المزيد من الأعمال
+        </button>
+      </div>
+    </div><!-- /9-col -->
+
+    <!-- ════════════ SIDEBAR (3 cols) ════════════ -->
+    <aside class="lg:col-span-3 order-1 lg:order-2 space-y-6">
+
+      <!-- Featured Designers -->
+      <section class="raised-card p-6">
+        <div class="flex items-center justify-between mb-5">
+          <a class="text-xs font-bold text-primary hover:underline" href="#">عرض الكل</a>
+          <h3 class="text-base font-bold text-clay-accent flex items-center gap-2">
+            <span class="material-symbols-outlined text-primary"
+                  style="font-size:16px;font-variation-settings:'FILL' 1">workspace_premium</span>
+            أبرز المصممين
+          </h3>
+        </div>
+        <div class="space-y-0.5">
+
+          <div class="designer-row">
+            <div class="flex-1 text-right">
+              <div class="font-bold text-sm text-on-surface">أحمد عثمان</div>
+              <div class="text-xs text-on-surface-variant">مصمم واجهات · الخرطوم</div>
+            </div>
+            <div class="relative flex-shrink-0">
+              <img alt="أحمد" class="w-11 h-11 rounded-full object-cover border-2 border-outline"
+                   src="https://lh3.googleusercontent.com/aida-public/AB6AXuBd0CxFZq57sdDGKF5XokmL1pKcXyWWKnjj2Flg19DylN6zPpjf_4D-GZ_o1ciNeHLUOLDANJpj7NiHrkIcFEN5QUoPPSZE-JvUsvCYdjLk0OxKV1pXCRjSpJs93e6A8nNZVo82iYzIn2-oz4tncVJEq77RzdufIsQ7YgfXM3bp25t0-kL6b9CC2O5rjzkShc7shcP7pYRVJUb2aw6AIEIRT25_2xWcmb2RRQTp9AH0BcjQl4Zop1w1LIuD7oeLJtwFI_oyzXvm4hQ"/>
+              <div class="absolute -bottom-0.5 -left-0.5 w-4 h-4 bg-primary rounded-full border-2 border-white flex items-center justify-center">
+                <span class="material-symbols-outlined text-white" style="font-size:9px;font-variation-settings:'FILL' 1">verified</span>
+              </div>
+            </div>
+          </div>
+
+          <div class="designer-row">
+            <div class="flex-1 text-right">
+              <div class="font-bold text-sm text-on-surface">مريم حسن</div>
+              <div class="text-xs text-on-surface-variant">هوية بصرية · أم درمان</div>
+            </div>
+            <div class="w-11 h-11 rounded-full bg-primary-container border-2 border-outline flex items-center justify-center flex-shrink-0 text-primary font-bold">م</div>
+          </div>
+
+          <div class="designer-row">
+            <div class="flex-1 text-right">
+              <div class="font-bold text-sm text-on-surface">كريم عبدالله</div>
+              <div class="text-xs text-on-surface-variant">تايبوغرافي عربي</div>
+            </div>
+            <div class="w-11 h-11 rounded-full bg-clay-accent/10 border-2 border-outline flex items-center justify-center flex-shrink-0 text-clay-accent font-bold">ك</div>
+          </div>
+
+          <div class="designer-row">
+            <div class="flex-1 text-right">
+              <div class="font-bold text-sm text-on-surface">نور الدين محمد</div>
+              <div class="text-xs text-on-surface-variant">زخارف نوبية</div>
+            </div>
+            <div class="w-11 h-11 rounded-full bg-secondary/15 border-2 border-outline flex items-center justify-center flex-shrink-0 text-secondary font-bold">ن</div>
+          </div>
+
+          <div class="designer-row">
+            <div class="flex-1 text-right">
+              <div class="font-bold text-sm text-on-surface">هالة يوسف</div>
+              <div class="text-xs text-on-surface-variant">موشن جرافيك</div>
+            </div>
+            <div class="w-11 h-11 rounded-full bg-on-surface/8 border-2 border-outline flex items-center justify-center flex-shrink-0 text-on-surface font-bold">هـ</div>
+          </div>
+
+        </div>
+      </section>
+
+      <!-- Platform Stats -->
+      <section class="raised-card p-6">
+        <h3 class="text-base font-bold text-clay-accent mb-4 text-right">إحصائيات المنصة</h3>
+        <div class="space-y-2.5">
+          <div class="stat-box">
+            <span class="text-xl font-bold text-clay-accent">١,٢٤٠+</span>
+            <div class="flex items-center gap-2 text-on-surface-variant text-sm">
+              <span>مصمم مسجل</span>
+              <span class="material-symbols-outlined text-primary" style="font-size:18px">group</span>
+            </div>
+          </div>
+          <div class="stat-box">
+            <span class="text-xl font-bold text-clay-accent">٨,٤٠٠+</span>
+            <div class="flex items-center gap-2 text-on-surface-variant text-sm">
+              <span>عمل إبداعي</span>
+              <span class="material-symbols-outlined text-primary" style="font-size:18px">palette</span>
+            </div>
+          </div>
+          <div class="stat-box">
+            <span class="text-xl font-bold text-clay-accent">٣٢٠+</span>
+            <div class="flex items-center gap-2 text-on-surface-variant text-sm">
+              <span>فرصة عمل</span>
+              <span class="material-symbols-outlined text-primary" style="font-size:18px">work</span>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Trending Tags -->
+      <section class="raised-card p-6">
+        <h3 class="text-base font-bold text-clay-accent mb-4 text-right flex items-center justify-end gap-2">
+          الوسوم الرائجة
+          <span class="material-symbols-outlined text-primary"
+                style="font-size:16px;font-variation-settings:'FILL' 1">trending_up</span>
+        </h3>
+        <div class="flex flex-wrap gap-2 justify-end">
+          <span class="trend-tag">#UI_عربي</span>
+          <span class="trend-tag">#زخارف_نوبية</span>
+          <span class="trend-tag">#هوية_سودانية</span>
+          <span class="trend-tag">#تايبوغرافي</span>
+          <span class="trend-tag">#بسمة</span>
+          <span class="trend-tag">#الخرطوم</span>
+          <span class="trend-tag">#كوش</span>
+          <span class="trend-tag">#تراث</span>
+          <span class="trend-tag">#موشن</span>
+          <span class="trend-tag">#مروي</span>
+        </div>
+      </section>
+
+      <!-- CTA gradient card -->
+      <section class="p-6 rounded-2xl text-center"
+               style="background:linear-gradient(135deg,#7b4a35 0%,#d33f24 100%);box-shadow:0 20px 40px -10px rgba(211,63,36,.32)">
+        <span class="material-symbols-outlined text-white block mb-3"
+              style="font-size:40px;font-variation-settings:'FILL' 1">add_photo_alternate</span>
+        <h3 class="text-white font-bold text-lg mb-2">شارك إبداعك</h3>
+        <p class="text-white/80 text-sm mb-5 leading-relaxed">انضم لآلاف المصممين السودانيين وانشر أعمالك للعالم</p>
+        <button class="bg-white text-clay-accent font-bold text-sm px-6 py-2.5 rounded-full hover:bg-primary-container transition-colors w-full"
+                style="box-shadow:0 4px 12px rgba(0,0,0,.15)">
+          ابدأ الآن مجاناً
+        </button>
+      </section>
+
+    </aside>
+
+  </div><!-- /main grid -->
+</main>
+
+<!-- ════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════ -->
+<footer class="w-full py-12 px-4 md:px-16 bg-white border-t border-outline-variant mt-16"
+        style="box-shadow:0 -4px 6px -1px rgba(123,74,53,.04)">
+  <div class="max-w-[1200px] mx-auto flex flex-col md:flex-row-reverse justify-between items-center gap-10">
+    <div class="flex flex-wrap justify-center gap-8 text-sm font-bold">
+      <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">عن المنصة</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">المجتمع</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">الشروط والخصوصية</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">تواصل معنا</a>
+      <a class="text-on-surface-variant hover:text-primary transition-colors" href="#">وظائف</a>
+    </div>
+    <div class="space-y-2 text-center md:text-right">
+      <div class="text-xl font-bold text-clay-accent">منصة المصممين السودانيين</div>
+      <div class="text-xs text-on-surface-variant font-medium tracking-wide">تجمع المبدعين في السودان</div>
+      <p class="text-xs text-on-surface-variant opacity-60">© ٢٠٢٤ منصة المصممين السودانيين. جميع الحقوق محفوظة.</p>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════
+     MOBILE BOTTOM NAV
+════════════════════════════════════════ -->
+<nav class="fixed bottom-4 left-4 right-4 z-50 flex justify-around items-center px-6 py-4 md:hidden bg-white/95 backdrop-blur-xl rounded-3xl border border-outline-variant"
+     style="box-shadow:0 20px 40px -10px rgba(123,74,53,.22)">
+  <a class="flex flex-col items-center text-primary" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">explore</span>
+    <span class="text-[10px] mt-1 font-bold">اكتشاف</span>
+  </a>
+  <a class="flex flex-col items-center text-on-surface-variant opacity-55" href="#">
+    <span class="material-symbols-outlined">search</span>
+    <span class="text-[10px] mt-1 font-bold">بحث</span>
+  </a>
+  <a class="flex flex-col items-center text-on-surface-variant opacity-55" href="#">
+    <span class="material-symbols-outlined">work</span>
+    <span class="text-[10px] mt-1 font-bold">وظائف</span>
+  </a>
+  <a class="flex flex-col items-center text-on-surface-variant opacity-55" href="#">
+    <span class="material-symbols-outlined" style="font-variation-settings:'FILL' 1">account_circle</span>
+    <span class="text-[10px] mt-1 font-bold">حسابي</span>
+  </a>
+</nav>
+
+<script>
+  // Category chip toggle
+  document.querySelectorAll('.cat-chip').forEach(chip => {
+    chip.addEventListener('click', function () {
+      document.querySelectorAll('.cat-chip').forEach(c => c.classList.remove('active'));
+      this.classList.add('active');
+    });
+  });
+
+  // Upvote toggle
+  document.querySelectorAll('.upvote-btn').forEach(btn => {
+    btn.addEventListener('click', function (e) {
+      e.stopPropagation();
+      this.classList.toggle('voted');
+    });
+  });
+
+  // Raised-card subtle press effect (from original)
+  document.querySelectorAll('.raised-card').forEach(card => {
+    card.addEventListener('mousedown', () => { card.style.transform = 'translateY(-2px) scale(0.995)'; });
+    card.addEventListener('mouseup',   () => { card.style.transform = ''; });
+    card.addEventListener('mouseleave',() => { card.style.transform = ''; });
+  });
+</script>
+</body>
+</html>
